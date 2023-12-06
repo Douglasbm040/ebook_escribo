@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:ebook_escribo/modules/domain/repository/request_book_repository.dart';
+import 'package:ebook_escribo/modules/domain/repositories/request_book_repository.dart';
 
 import '../entity/book_entity.dart';
 import '../errors/errors.dart';

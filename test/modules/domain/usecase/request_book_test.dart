@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
 import 'package:ebook_escribo/modules/domain/errors/errors.dart';
-import 'package:ebook_escribo/modules/domain/repository/request_book_repository.dart';
+import 'package:ebook_escribo/modules/domain/repositories/request_book_repository.dart';
 import 'package:ebook_escribo/modules/domain/usecase/request_livros.dart';
 import 'package:flutter_test/flutter_test.dart';
 
