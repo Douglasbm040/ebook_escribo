@@ -7,8 +7,8 @@ import '../../domain/repositories/request_book_repository.dart';
 import '../datasources/request_book_external.dart';
 import '../errors/errors.dart';
 
-class RequestBookRepositoryImpl implements RequestBookRepository {
-  RequestBookDatasource bookExternal;
+class RequestBookRepositoryImpl implements IRequestBookRepository {
+  IRequestBookDatasource bookExternal;
   RequestBookRepositoryImpl({required this.bookExternal});
 
   @override

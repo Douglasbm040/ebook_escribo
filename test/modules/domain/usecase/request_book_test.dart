@@ -2,19 +2,19 @@ import 'package:dartz/dartz.dart';
 import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
 import 'package:ebook_escribo/modules/domain/errors/errors.dart';
 import 'package:ebook_escribo/modules/domain/repositories/request_book_repository.dart';
-import 'package:ebook_escribo/modules/domain/usecase/request_livros.dart';
+import 'package:ebook_escribo/modules/domain/usecases/request_book_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mocktail/mocktail.dart';
 
-class RequestBookMock extends Mock implements RequestBookRepository {}
+class RequestBookMock extends Mock implements IRequestBookRepository {}
 
 void main() {
   late RequestBookMock request;
-  late RequestBookimpl usecase;
+  late RequestBookUseCase usecase;
   setUp(() {
     request = RequestBookMock();
-    usecase = RequestBookimpl(requestBookRepository: request);
+    usecase = RequestBookUseCase(requestBookRepository: request);
   });
   test('Deve retornar uma lista de livros', () async {
     // Configurar o comportamento esperado do mock
@@ -23,7 +23,7 @@ void main() {
     final result = await usecase("book");
     expect(result, isA<Right>());   
   });
-    test('Deve retornar uma FailureRequestBook', () async {
+    test('Deve retornar uma FailureRequestBook, para string empty no argumento', () async {
     when(() => request.getBooks("book")).thenAnswer(
         (_) async => const Right<FailureRequestBook, List<BookEntity>>(<BookEntity>[]));
     final result = await usecase("");

@@ -8,10 +8,10 @@ abstract class IRequestBookUseCase {
   Future<Either<FailureRequestBook, List<BookEntity>>> call(String endPointBook);
 }
 
-class RequestBookimpl implements IRequestBookUseCase {
-  final RequestBookRepository requestBookRepository;
+class RequestBookUseCase implements IRequestBookUseCase {
+  final IRequestBookRepository requestBookRepository;
 
-  RequestBookimpl({required this.requestBookRepository});
+  RequestBookUseCase({required this.requestBookRepository});
 
   @override
   Future<Either<FailureRequestBook, List<BookEntity>>> call(String endPointBook) async {

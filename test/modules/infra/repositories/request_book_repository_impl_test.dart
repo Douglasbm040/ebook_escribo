@@ -10,11 +10,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mocktail/mocktail.dart';
 
-class RequestBookExternalMock extends Mock implements RequestBookDatasource {}
+class RequestBookExternalMock extends Mock implements IRequestBookDatasource {}
 
 void main() {
   late RequestBookRepositoryImpl datasourceRequest;
-  late RequestBookDatasource bookExternal;
+  late IRequestBookDatasource bookExternal;
   setUp(() {
     bookExternal = RequestBookExternalMock();
     datasourceRequest = RequestBookRepositoryImpl(bookExternal: bookExternal);
