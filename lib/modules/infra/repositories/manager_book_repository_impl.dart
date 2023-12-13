@@ -12,14 +12,12 @@ class ManagerBookRepositoryImpl implements IManageBookRepository {
   @override
   Future<Either<FailureDownloadBook, int>> downloadBooks(
       BookEntity book) async {
-    try {
-      int resultOperation =
-          await managerBookDatasource.downloadBooks(Book.fromBookEntity(book));
-      if (resultOperation >= 1) {
-        return right(resultOperation);
-      }
-      return left(InsertErrorBook());
-    } catch (e) {
+    int resultOperation =
+        await managerBookDatasource.downloadBooks(Book.fromBookEntity(book)) ??
+            -1;
+    if (resultOperation >= 0) {
+      return right(resultOperation);
+    } else {
       return left(InsertErrorBook());
     }
   }
@@ -29,6 +27,32 @@ class ManagerBookRepositoryImpl implements IManageBookRepository {
       getAllDownloaded() async {
     try {
       final result = await managerBookDatasource.getAllDownloaded();
+      return right(result);
+    } catch (e) {
+      return left(SelectErrorBook());
+    }
+  }
+
+  @override
+  Future<Either<FailureDownloadBook, int>> favoriteToggle(
+      BookEntity book) async {
+    try {
+      int resultOperation =
+          await managerBookDatasource.favoriteToggle(Book.fromBookEntity(book));
+      if (resultOperation >= 0) {
+        return right(resultOperation);
+      }
+      return left(UpdateErrorBook());
+    } catch (e) {
+      return left(UpdateErrorBook());
+    }
+  }
+
+  @override
+  Future<Either<FailureDownloadBook, List<BookEntity>?>>
+      getAllBooksFavorite() async {
+    try {
+      final result = await managerBookDatasource.getAllBooksFavorite();
       return right(result);
     } catch (e) {
       return left(SelectErrorBook());

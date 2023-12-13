@@ -13,7 +13,7 @@ void main() async {
     sqfliteFfiInit();
     Database database =
         await databaseFactoryFfi.openDatabase(inMemoryDatabasePath);
-    database.execute(DatabaseSqliteDatasource.ebook);
+    database.execute(DatabaseSqliteDatasource.BIBLIOTECA);
     Modular.bindModule(AppModule(() => DatabaseSqliteDatasource(database)));
     usecase = Modular.get<IRequestBookUseCase>();
   });

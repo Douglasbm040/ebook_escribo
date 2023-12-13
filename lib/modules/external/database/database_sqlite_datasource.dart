@@ -1,11 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
 import 'package:path/path.dart';
-import 'package:ebook_escribo/modules/infra/model/book.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+import '../../domain/entity/book_entity.dart';
 import '../../infra/datasources/imanager_book_datasource.dart';
+import '../../infra/model/book.dart';
 
 class DatabaseSqliteDatasource implements IManagerBookDatasource {
   late final Database _database;
@@ -22,9 +22,9 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
     if (_instance == null) {
       sqfliteFfiInit();
       Database database = await openDatabase(
-        join(await getDatabasesPath(), 'dbebook.db'),
+        join(await getDatabasesPath(), 'dbBIBLIOTECA.db'),
         onCreate: (db, version) async {
-          await db.execute(ebook);
+          await db.execute(BIBLIOTECA);
         },
         version: 1,
       );
@@ -33,9 +33,9 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
     return _instance!;
   }
 
-  static String get ebook => '''
-      CREATE TABLE EBOOK (
-        ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  static String get BIBLIOTECA => '''
+      CREATE TABLE IF NOT EXISTS BIBLIOTECA (
+        ID INTEGER,
         TITLE TEXT,
         AUTHOR TEXT,
         COVER_URL TEXT,
@@ -47,7 +47,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   @override
   Future<List<BookEntity>?> getAllDownloaded() async {
     final db = _database;
-    final List<Map<String, dynamic>> maps = await db.query("EBOOK");
+    final List<Map<String, dynamic>> maps = await db.query("BIBLIOTECA");
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));
 
@@ -57,8 +57,35 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   @override
   Future<int> downloadBooks(Book book) async {
     final db = _database;
-    int resultTransition = await db.insert('EBOOK', book.toJsonDAO(),
+    int resultTransition = await db.insert('BIBLIOTECA', book.toJsonDAO(),
         conflictAlgorithm: ConflictAlgorithm.replace);
     return resultTransition;
+  }
+
+  @override
+  Future<int> favoriteToggle(Book book) async {
+    final db = _database;
+    int isfavorite = book.favorite == 1 ? 2 : 1;
+
+    int resultTransition = await db.update(
+      'BIBLIOTECA',
+      {'FAVORITE': isfavorite},
+      where: 'ID = ?',
+      whereArgs: [book.id],
+    );
+    return resultTransition;
+  }
+
+  @override
+  Future<List<BookEntity>?> getAllBooksFavorite() async {
+    final db = _database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      "BIBLIOTECA",
+      where: "FAVORITE = ?",
+      whereArgs: [1],
+    );
+    final listbookAll =
+        List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));
+    return listbookAll;
   }
 }

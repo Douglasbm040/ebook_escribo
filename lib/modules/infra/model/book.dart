@@ -7,13 +7,14 @@ class Book extends BookEntity {
     required String author,
     required String coverUrl,
     required String downloadUrl,
+    required int favorite,
   }) : super(
             id: id,
             title: title,
             author: author,
             coverUrl: coverUrl,
             downloadUrl: downloadUrl,
-            favorite: 1);
+            favorite: favorite);
 
   Book.fromJsonDAO(Map<String, dynamic> json)
       : super(

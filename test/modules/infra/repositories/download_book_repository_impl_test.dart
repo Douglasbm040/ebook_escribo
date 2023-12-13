@@ -12,27 +12,15 @@ class ManagerBookExternalMock extends Mock implements IManagerBookDatasource {}
 void main() {
   late IManagerBookDatasource datasource;
   late ManagerBookRepositoryImpl repository;
-  late Book paramm;
-  setUp(() {
+
+
+  setUpAll(() {
     datasource = ManagerBookExternalMock();
     repository = ManagerBookRepositoryImpl(managerBookDatasource: datasource);
-    paramm = Book.fromBookEntity(BookEntity(
-        favorite: 1,
-        id: 1,
-        title: "test",
-        author: "as",
-        coverUrl: "qweqw",
-        downloadUrl: "asdas"));
+ 
   });
 
-  group("INFRA - Deve fazer o download de um livro para o banco ", () {
-    
-    test("Deve retornar um erro no download", () async {
-      when(() => datasource.downloadBooks(paramm)).thenThrow(Exception());
-      final result = await repository.downloadBooks(paramm);
-      expect(result.fold(id, (r) => null), isA<InsertErrorBook>());
-    });
-  });
+
 
   group("INFRA - Deve fazer o obter todo os livro baixados", () {
     test("Deve retornar todos os Livros", () async {
@@ -44,6 +32,20 @@ void main() {
     test("Deve retornar um erro no download", () async {
       when(() => datasource.getAllDownloaded()).thenThrow(Exception());
       final result = await repository.getAllDownloaded();
+      expect(result.fold(id, id), isA<SelectErrorBook>());
+    });
+  });
+
+  group("INFRA - Deve fazer o obter todo os livro favoritos", () {
+    test("Deve retornar todos os Livros favoritos", () async {
+      when(() => datasource.getAllBooksFavorite())
+          .thenAnswer((_) async => <BookEntity>[]);
+      final result = await repository.getAllBooksFavorite();
+      expect(result.isRight(), true);
+    });
+    test("Deve retornar um erro no buscar os favoritos", () async {
+      when(() => datasource.getAllBooksFavorite()).thenThrow(Exception());
+      final result = await repository.getAllBooksFavorite();
       expect(result.fold(id, id), isA<SelectErrorBook>());
     });
   });

@@ -6,4 +6,6 @@ import '../errors/errors.dart';
 abstract class IManageBookRepository {
   Future<Either<FailureDownloadBook, List<BookEntity>?>> getAllDownloaded();
   Future<Either<FailureDownloadBook, int>> downloadBooks(BookEntity book);
+  Future<Either<FailureDownloadBook, int>> favoriteToggle(BookEntity book);
+  Future<Either<FailureDownloadBook, List<BookEntity>?>> getAllBooksFavorite();
 }
