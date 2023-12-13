@@ -1,12 +1,10 @@
+import 'package:ebook_escribo/modules/presenter/controller/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../domain/entity/book_entity.dart';
-import '../../domain/usecases/request_book_usecase.dart';
-import '../../external/datasource/http_datasource.dart';
-import '../../infra/repositories/resquest_book_repository_impl.dart';
-/*
+
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
@@ -16,32 +14,22 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   
+  final controller = Modular.get<Controller>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: FutureBuilder<List<BookEntity>>(
-            future: usecase.call("/books.json").then((value) => value.fold(
-                (l) => [
-                      BookEntity(
-                          id: 0,
-                          title: "",
-                          author: "",
-                          coverUrl: "",
-                          downloadUrl: "",
-                          favorite: 1
-                          )
-                    ],
-                (r) => r)),
+        child: FutureBuilder<List<BookEntity>?>(
+            future: controller.getAllRequested(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               }
               return Text('Item ${snapshot.data?.length}');
+              
             }),
       ),
     );
   }
 }
-*/

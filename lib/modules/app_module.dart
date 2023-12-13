@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 
 import 'infra/repositories/manager_book_repository_impl.dart';
 import 'infra/repositories/resquest_book_repository_impl.dart';
+import 'presenter/controller/controller.dart';
 
 class AppModule extends Module {
   final IManagerBookDatasource Function() database;
@@ -22,6 +23,7 @@ class AppModule extends Module {
   void exportedBinds(Injector i) {
     i.add<IRequestBookUseCase>(RequestBookUseCase.new);
     i.add<IManageBooksUseCase>(ManageBooksUseCase.new);
+    i.add<Controller>(Controller.new);
   }
 
   @override
@@ -35,5 +37,8 @@ class AppModule extends Module {
     i.add<IManagerBookDatasource>(database);
     i.add<IManageBookRepository>(ManagerBookRepositoryImpl.new);
     i.add<IManageBooksUseCase>(ManageBooksUseCase.new);
+
+    //!controller
+    i.add<Controller>(Controller.new);
   }
 }
