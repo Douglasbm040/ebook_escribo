@@ -1,5 +1,6 @@
 import 'package:ebook_escribo/modules/presenter/view/home_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppWidget extends StatelessWidget {
@@ -7,6 +8,7 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Modular.setInitialRoute('/');
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
