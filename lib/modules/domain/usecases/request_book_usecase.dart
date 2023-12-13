@@ -5,7 +5,9 @@ import '../entity/book_entity.dart';
 import '../errors/errors.dart';
 
 abstract class IRequestBookUseCase {
-  Future<Either<FailureRequestBook, List<BookEntity>>> call(String endPointBook);
+  Future<Either<FailureRequestBook, List<BookEntity>>> getBooks(
+      String endPointBook);
+  Future<Either<FailureRequestBook, String>> downloadBook(String linkBook);
 }
 
 class RequestBookUseCase implements IRequestBookUseCase {
@@ -14,10 +16,21 @@ class RequestBookUseCase implements IRequestBookUseCase {
   RequestBookUseCase({required this.requestBookRepository});
 
   @override
-  Future<Either<FailureRequestBook, List<BookEntity>>> call(String endPointBook) async {
+  Future<Either<FailureRequestBook, List<BookEntity>>> getBooks(
+      String endPointBook) async {
     if (endPointBook.isEmpty) {
-      return Left(InvalidateEndPointBook()); 
+      return Left(InvalidateEndPointBook());
     }
     return await requestBookRepository.getBooks(endPointBook);
+  }
+
+  @override
+  Future<Either<FailureRequestBook, String>> downloadBook(
+      String linkBook) async {
+    if (linkBook.isEmpty) {
+      return Left(InvalidateLinkBook());
+    }
+
+    return await requestBookRepository.downloadBook(linkBook);
   }
 }

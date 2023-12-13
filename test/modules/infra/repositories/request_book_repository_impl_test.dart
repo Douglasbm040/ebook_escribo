@@ -15,6 +15,7 @@ class RequestBookExternalMock extends Mock implements IRequestBookDatasource {}
 void main() {
   late RequestBookRepositoryImpl datasourceRequest;
   late IRequestBookDatasource bookExternal;
+  late Book response;
   setUp(() {
     bookExternal = RequestBookExternalMock();
     datasourceRequest = RequestBookRepositoryImpl(bookExternal: bookExternal);
@@ -29,6 +30,17 @@ void main() {
   test('Deve retornar uma DatasourceFailure caso de retorno de erro', () async {
     when(() => bookExternal.getBooks("/books.json")).thenThrow(Exception());
     final result = await datasourceRequest.getBooks("/books.json");
+    expect(result.fold(id, id), isA<DatasourceFailure>());
+  });
+  test('Deve retornar um livro baixado', () async {
+    when(() => bookExternal.downloadBook("/books.json"))
+        .thenAnswer((_) async => "bytes");
+    final result = await datasourceRequest.downloadBook("/books.json");
+    expect(result, isA<Right>());
+  });
+  test('Deve retornar uma DatasourceFailure caso de retorno de erro', () async {
+    when(() => bookExternal.downloadBook("/books.json")).thenThrow(Exception());
+    final result = await datasourceRequest.downloadBook("/books.json");
     expect(result.fold(id, id), isA<DatasourceFailure>());
   });
 }

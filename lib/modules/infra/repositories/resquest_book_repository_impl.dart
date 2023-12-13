@@ -22,4 +22,16 @@ class RequestBookRepositoryImpl implements IRequestBookRepository {
       return left(DatasourceFailure());
     }
   }
+
+  @override
+  Future<Either<FailureRequestBook, String>> downloadBook(
+      String linkBook) async {
+    try {
+      final response = await bookExternal.downloadBook(linkBook);
+
+      return Right(response);
+    } catch (e) {
+      return left(DatasourceFailure());
+    }
+  }
 }

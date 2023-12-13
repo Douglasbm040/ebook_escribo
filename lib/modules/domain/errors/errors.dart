@@ -1,6 +1,7 @@
 abstract class FailureRequestBook implements Exception {}
 
 class InvalidateEndPointBook implements FailureRequestBook {}
+class InvalidateLinkBook implements FailureRequestBook {}
 
 abstract class FailureDownloadBook implements Exception {}
 

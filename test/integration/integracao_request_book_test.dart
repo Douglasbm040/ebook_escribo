@@ -18,7 +18,12 @@ void main() async {
     usecase = Modular.get<IRequestBookUseCase>();
   });
   test('Deve executar todo o servico de buscar de livro', () async {
-    var teste = await usecase("books.json");
+    var teste = await usecase.getBooks("books.json");
+    expect(teste.isRight(), true);
+  });
+  test('Deve executar todo o servico de buscar de livro', () async {
+    var teste = await usecase
+        .downloadBook("https://www.gutenberg.org/ebooks/72134.epub3.images");
     expect(teste.isRight(), true);
   });
 }

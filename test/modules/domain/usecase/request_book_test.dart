@@ -20,13 +20,26 @@ void main() {
     // Configurar o comportamento esperado do mock
     when(() => request.getBooks("book")).thenAnswer(
         (_) async => const Right<FailureRequestBook, List<BookEntity>>(<BookEntity>[]));
-    final result = await usecase("book");
+    final result = await usecase.getBooks("book");
     expect(result, isA<Right>());   
   });
     test('Deve retornar uma FailureRequestBook, para string empty no argumento', () async {
     when(() => request.getBooks("book")).thenAnswer(
         (_) async => const Right<FailureRequestBook, List<BookEntity>>(<BookEntity>[]));
-    final result = await usecase("");
+    final result = await usecase.getBooks("");
+    expect(result.isLeft(), true);   
+  });
+   test('Deve baixar o livro', () async {
+    // Configurar o comportamento esperado do mock
+    when(() => request.downloadBook("book")).thenAnswer(
+        (_) async => const Right<FailureRequestBook, String>("bytes"));
+    final result = await usecase.downloadBook("book");
+    expect(result, isA<Right>());   
+  });
+    test('Deve retornar uma FailureRequestBook, para string empty no argumento', () async {
+    when(() => request.downloadBook("book")).thenAnswer(
+        (_) async => const Right<FailureRequestBook, String>("bytes"));
+    final result = await usecase.downloadBook("");
     expect(result.isLeft(), true);   
   });
 }
