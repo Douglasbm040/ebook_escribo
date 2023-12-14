@@ -45,6 +45,10 @@ class _HomeViewState extends State<HomeView> {
               Radius.circular(25.0),
             ),
             child: BottomNavigationBar(
+              unselectedLabelStyle:
+                  const TextStyle(fontSize: 14, fontFamily: "Afacad"),
+              selectedLabelStyle: const TextStyle(
+                  fontWeight: FontWeight.bold, fontFamily: "Afacad"),
               iconSize: 30,
               selectedIconTheme:
                   const IconThemeData(color: Colors.amberAccent, size: 32),
@@ -52,19 +56,18 @@ class _HomeViewState extends State<HomeView> {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.menu_book_rounded),
                   label: 'Library',
-                  backgroundColor: Color(0xffDCDCDC),
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.book),
                   label: 'Saved',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite),
+                  icon: Icon(Icons.bookmark_outlined),
                   label: 'Favorites',
                 ),
               ],
               currentIndex: _selectedIndex,
-              selectedItemColor: Colors.blue,
+              selectedItemColor: Colors.black,
               onTap: _onItemTapped,
               elevation: 3,
             ),
@@ -98,7 +101,42 @@ class _libraryComponentState extends State<libraryComponent> {
               return Text('Error: ${snapshot.error}');
             }
             return snapshot.data?.length == 0
-                ? const Center(child: Text('No books found'))
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ClipOval(
+                            child: Container(
+                              height: 200,
+                              color: Colors.white,
+                              child: ClipOval(
+                                child: Container(
+                                  height: 100,
+                                  color: Colors.amber[200],
+                                  child: Lottie.asset(
+                                    repeat: false,
+                                    height: 10,
+                                    'assets/animations/semregistros.json',
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Sem registros',
+                            style: const TextStyle(
+                                fontFamily: "Afacad",
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700)),
+                      ),
+                    ],
+                  )
                 : Column(
                     children: [
                       Expanded(
@@ -108,7 +146,8 @@ class _libraryComponentState extends State<libraryComponent> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 20),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,19 +160,21 @@ class _libraryComponentState extends State<libraryComponent> {
                                       child: const Row(
                                         children: [
                                           Text(
-                                            "LabraryWay",
+                                            "LibraryWay",
                                             style: TextStyle(
+                                                fontFamily: 'Kalnia',
+                                                fontWeight: FontWeight.bold,
                                                 color: Colors.black,
-                                                fontSize: 40),
+                                                fontSize: 30),
                                           ),
                                           Padding(
                                             padding: EdgeInsets.fromLTRB(
                                                 50, 0, 0, 0),
                                             child: CircleAvatar(
-                                              radius: 40,
+                                              radius: 25,
                                               child: CircleAvatar(
                                                 backgroundColor: Colors.white,
-                                                radius: 40,
+                                                radius: 20,
                                                 child: Icon(
                                                   Icons.menu_book,
                                                 ),
@@ -165,6 +206,7 @@ class _libraryComponentState extends State<libraryComponent> {
                                             animatedTexts: [
                                               RotateAnimatedText("Leia +",
                                                   textStyle: const TextStyle(
+                                                      fontFamily: "Afacad",
                                                       fontSize: 20,
                                                       color: Colors.black,
                                                       fontWeight:
@@ -173,6 +215,7 @@ class _libraryComponentState extends State<libraryComponent> {
                                                       seconds: 1)),
                                               RotateAnimatedText("Imagine +",
                                                   textStyle: const TextStyle(
+                                                      fontFamily: "Afacad",
                                                       fontSize: 20,
                                                       color: Colors.black,
                                                       fontWeight:
@@ -192,7 +235,7 @@ class _libraryComponentState extends State<libraryComponent> {
                         ),
                       )),
                       Expanded(
-                        flex: 3,
+                        flex: 4,
                         child: GridView.builder(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
@@ -207,17 +250,22 @@ class _libraryComponentState extends State<libraryComponent> {
                               .data?.length, // Número total de itens na grade
                           itemBuilder: (BuildContext context, int index) {
                             return snapshot.data?[index] == null
-                                ? Center(
-                                    child: ClipOval(
-                                      child: Container(
-                                        color: Colors.grey[300],
-                                        height: 80,
-                                        width: 80,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(3.0),
-                                          child: ClipOval(
-                                            child: Lottie.asset(
-                                              'assets/animations/book.json',
+                                ? Card(
+                                    shadowColor: Colors.white,
+                                    color: Colors.white,
+                                    elevation: 2,
+                                    child: Center(
+                                      child: ClipOval(
+                                        child: Container(
+                                          color: Colors.grey[300],
+                                          height: 80,
+                                          width: 80,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(3.0),
+                                            child: ClipOval(
+                                              child: Lottie.asset(
+                                                'assets/animations/book.json',
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -271,8 +319,9 @@ class _libraryComponentState extends State<libraryComponent> {
                                               child: Text(
                                                 '${snapshot.data?[index].title}',
                                                 style: const TextStyle(
+                                                    fontFamily: "Afacad",
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
+                                                    fontSize: 16,
                                                     color: Colors.black),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
@@ -284,7 +333,8 @@ class _libraryComponentState extends State<libraryComponent> {
                                               child: Text(
                                                 '${snapshot.data?[index].author}',
                                                 style: const TextStyle(
-                                                  fontSize: 12,
+                                                  fontFamily: "Afacad",
+                                                  fontSize: 14,
                                                   color: Colors.black45,
                                                 ),
                                               ),
@@ -292,15 +342,24 @@ class _libraryComponentState extends State<libraryComponent> {
                                           ],
                                         ),
                                       ),
-                                      const Positioned(
-                                        right: 0,
+                                      Positioned(
+                                        right: 1,
+                                        bottom: 70,
                                         child: CircleAvatar(
-                                          radius: 22,
-                                          child: CircleAvatar(
+                                          radius: 25,
+                                          backgroundColor: Colors.grey[200],
+                                          child: const CircleAvatar(
+                                              radius: 22,
                                               backgroundColor: Colors.amber,
                                               child: Icon(
-                                                Icons.bookmark_border_rounded,
-                                                color: Colors.white,
+                                                true
+                                                    ? Icons.bookmark_outlined
+                                                    : Icons
+                                                        .bookmark_border_rounded,
+                                                color: true
+                                                    ? Colors.redAccent
+                                                    : Colors.white38,
+                                                size: 40,
                                               )),
                                         ),
                                       )
