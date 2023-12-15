@@ -3,29 +3,34 @@ import 'package:ebook_escribo/modules/presenter/view/components/animation_book_l
 import 'package:ebook_escribo/modules/presenter/view/components/book_component.dart';
 import 'package:flutter/material.dart';
 
-class GridViewComponent extends StatelessWidget {
+class GridViewComponent extends StatefulWidget {
   const GridViewComponent({
     super.key,
-    this.listBook,
+    this.listBook, required this.pages,
   });
-
+  final int pages;
   final List<BookEntity>? listBook;
 
   @override
+  State<GridViewComponent> createState() => _GridViewComponentState();
+}
+
+class _GridViewComponentState extends State<GridViewComponent> {
+  @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 6,
+      flex: 7,
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 5.0,
             mainAxisSpacing: 5.0,
             childAspectRatio: .6),
-        itemCount: listBook?.length,
+        itemCount: widget.listBook?.length,
         itemBuilder: (BuildContext context, int index) {
-          return listBook?[index] == null
+          return widget.listBook?[index] == null
               ? const AnimationBookLoading()
-              : BookComponent(book: listBook![index]);
+              : BookComponent(book: widget.listBook![index],pages:widget.pages);
         },
       ),
     );

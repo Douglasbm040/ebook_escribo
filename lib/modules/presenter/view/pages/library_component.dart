@@ -10,8 +10,10 @@ class libraryComponent extends StatefulWidget {
   const libraryComponent({
     super.key,
     required this.controller,
+    required this.page,
   });
   final Future<List<BookEntity>?> controller;
+  final int page;
 
   @override
   State<libraryComponent> createState() => _libraryComponentState();
@@ -55,7 +57,8 @@ class _libraryComponentState extends State<libraryComponent> {
                           ],
                         ),
                       ),
-                      GridViewComponent(listBook: snapshot.data),
+                      GridViewComponent(
+                          listBook: snapshot.data, pages: widget.page),
                     ],
                   );
           }),

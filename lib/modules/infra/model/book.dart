@@ -9,7 +9,8 @@ class Book extends BookEntity {
     required String coverUrl,
     required String downloadUrl,
     required int favorite,
-  }) : super(path: path,
+  }) : super(
+            path: path,
             id: id,
             title: title,
             author: author,
@@ -18,7 +19,8 @@ class Book extends BookEntity {
             favorite: favorite);
 
   Book.fromJsonDAO(Map<String, dynamic> json)
-      : super(path: json["PATH"],
+      : super(
+            path: json["PATH"],
             id: json['ID'],
             title: json['TITLE'],
             author: json['AUTHOR'],
@@ -52,5 +54,25 @@ class Book extends BookEntity {
     data['COVER_URL'] = coverUrl;
     data['DOWNLOAD_URL'] = downloadUrl;
     return data;
+  }
+
+  BookEntity copyWith({
+    String? path,
+    int? id,
+    String? title,
+    String? author,
+    String? coverUrl,
+    String? downloadUrl,
+    int? favorite,
+  }) {
+    return BookEntity(
+      path: path ?? this.path,
+      id: id ?? this.id,
+      title: title ?? this.title,
+      author: author ?? this.author,
+      coverUrl: coverUrl ?? this.coverUrl,
+      downloadUrl: downloadUrl ?? this.downloadUrl,
+      favorite: favorite ?? this.favorite,
+    );
   }
 }

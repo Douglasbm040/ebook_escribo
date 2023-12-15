@@ -5,14 +5,14 @@ import 'package:ebook_escribo/modules/presenter/view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import 'button_favorite.dart';
-
 class BookComponent extends StatelessWidget {
   const BookComponent({
     super.key,
     required this.book,
+    required this.pages,
   });
   final BookEntity book;
+  final int pages;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -31,7 +31,16 @@ class BookComponent extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                   child: InkWell(
                     onTap: () async {
-                      await Modular.get<Controller>().downloadBook(book);
+                      if (pages == 0) {
+                        final snackBar = SnackBar(
+                          content: Text(await Modular.get<Controller>()
+                              .downloadBook(book)),
+                          duration: Duration(seconds: 3), // Duração da exibição
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else {
+                        Modular.to.pushNamed("/read",arguments: book);
+                      }
                     },
                     child: SizedBox(
                       width: 300,
@@ -77,7 +86,36 @@ class BookComponent extends StatelessWidget {
             ],
           ),
         ),
-        ButtonFavorite(isfavorite: book.favorite == 1 ? true : false),
+        Positioned(
+          right: -1,
+          child: InkWell(
+            onTap: () async {
+              await Modular.get<Controller>().favoriteToggle(book);
+              final snackBar = SnackBar(
+                content: Text(book.favorite == 2
+                    ? "Livro favoritado"
+                    : "Livro desfavoritado"),
+                duration: const Duration(seconds: 3),
+              );
+
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
+            child: CircleAvatar(
+              radius: 25,
+              backgroundColor: Colors.grey[200],
+              child: CircleAvatar(
+                  radius: 22,
+                  backgroundColor: Colors.amber,
+                  child: Icon(
+                    book.favorite == 2
+                        ? Icons.bookmark_outlined
+                        : Icons.bookmark_rounded,
+                    color: book.favorite == 2 ? Colors.redAccent : Colors.white,
+                    size: 40,
+                  )),
+            ),
+          ),
+        )
       ],
     );
   }

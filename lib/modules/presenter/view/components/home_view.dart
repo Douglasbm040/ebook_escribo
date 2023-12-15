@@ -20,21 +20,8 @@ class AnimationTitle extends StatelessWidget {
                   fontFamily: 'Kalnia',
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
-                  fontSize: 25),
+                  fontSize: 40),
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
-              child: CircleAvatar(
-                radius: 25,
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 20,
-                  child: Icon(
-                    Icons.menu_book,
-                  ),
-                ),
-              ),
-            )
           ],
         ));
   }

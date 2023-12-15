@@ -13,7 +13,7 @@ class ManagerBookRepositoryImpl implements IManageBookRepository {
   Future<Either<FailureDownloadBook, int>> downloadBook(
       BookEntity book,String path) async {
     int resultOperation =
-        await managerBookDatasource.downloadBook(Book.fromBookEntity(book), path); ;
+        await managerBookDatasource.downloadBook(Book.fromBookEntity(book), path); 
     if (resultOperation >= 0) {
       return right(resultOperation);
     } else {

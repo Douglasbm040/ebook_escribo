@@ -38,12 +38,16 @@ class Controller {
       int? transation;
       final response = await usecaseMangeBook.downloadBook(book, path!);
       response.fold((l) => null, (r) => transation = r);
-      if (transation != null ) {
+      if (transation != null) {
         return "O livro foi baixado com sucesso !";
       }
       return "Erro ao baixar o livro ! verifique sua conexão";
     } else {
       return "O livro já foi baixado !";
     }
+  }
+
+  Future<void> favoriteToggle(BookEntity book) async {
+    await usecaseMangeBook.favoriteToggle(book);
   }
 }

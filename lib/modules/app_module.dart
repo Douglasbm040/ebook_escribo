@@ -1,8 +1,9 @@
+
+
 import 'package:ebook_escribo/modules/domain/usecases/manager_books_usecase.dart';
-import 'package:ebook_escribo/modules/external/database/database_sqlite_datasource.dart';
 import 'package:ebook_escribo/modules/presenter/view/home_view.dart';
+import 'package:ebook_escribo/modules/presenter/view/read_view.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'domain/repositories/imanage_book_repository.dart';
 import 'domain/repositories/request_book_repository.dart';
@@ -46,5 +47,6 @@ class AppModule extends Module {
   @override
   void routes(r) {
     r.child('/', child: (context) => const HomeView(), children: []);
+    r.child('/read', child: (context)=>const ReadView());
   }
 }

@@ -22,7 +22,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
     if (_instance == null) {
       sqfliteFfiInit();
       Database database = await openDatabase(
-        join(await getDatabasesPath(), 'dbBIBLIOTECA.db'),
+        join(await getDatabasesPath(), 'BIBLIOTECA.db'),
         onCreate: (db, version) async {
           await db.execute(BIBLIOTECA);
         },
@@ -35,20 +35,21 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
 
   static String get BIBLIOTECA => '''
 
-      CREATE TABLE IF NOT EXISTS BIBLIOTECA (
+      CREATE TABLE BIBLIOTECA (
         ID INTEGER,
         TITLE TEXT,
         AUTHOR TEXT,
         COVER_URL TEXT,
         DOWNLOAD_URL TEXT,
         PATH TEXT,
-        FAVORITE INTEGER DEFAULT 1
+        FAVORITE INTEGER 
       )
     ''';
 
   @override
   Future<List<BookEntity>?> getAllDownloaded() async {
     final db = _database;
+    print("trazer tudo do banco");
     final List<Map<String, dynamic>> maps = await db.query("BIBLIOTECA");
     print(maps);
     final listbookAll =
@@ -59,6 +60,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
 
   @override
   Future<int> downloadBook(Book book, String path) async {
+    print("baixar para o banco");
     final db = _database;
     final listBookDownloaded = await getAllDownloaded();
     int? position =
@@ -81,8 +83,13 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
 
   @override
   Future<int> favoriteToggle(Book book) async {
+    int isfavorite = 1;
     final db = _database;
-    int isfavorite = book.favorite == 1 ? 2 : 1;
+    if (book.favorite == 2) {
+      isfavorite = 1;
+    } else {
+      isfavorite = 2;
+    }
 
     int resultTransition = await db.update(
       'BIBLIOTECA',
@@ -98,8 +105,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
     final db = _database;
     final List<Map<String, dynamic>> maps = await db.query(
       "BIBLIOTECA",
-      where: "FAVORITE = ?",
-      whereArgs: [2],
+      where: "FAVORITE = 2",
     );
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));
