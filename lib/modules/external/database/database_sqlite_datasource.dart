@@ -49,7 +49,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   @override
   Future<List<BookEntity>?> getAllDownloaded() async {
     final db = _database;
-    //await db.delete("BIBLIOTECA");
+    await db.delete("BIBLIOTECA");
     print("trazer tudo do banco");
     final List<Map<String, dynamic>> maps = await db.query("BIBLIOTECA");
     print(maps);
@@ -61,6 +61,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
 
   @override
   Future<int> downloadBook(Book book, String path) async {
+    int resultOperation = -1;
     print("baixar para o banco");
     final db = _database;
     final listBookDownloaded = await getAllDownloaded();
@@ -70,18 +71,20 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
       print("atualizar o banco");
       print(path);
       print(book.id);
-      int resultTransition = await db.update(
+      await db.update(
         'BIBLIOTECA',
         {'PATH': path},
         where: 'ID = ?',
         whereArgs: [book.id],
       );
-      return resultTransition;
+      resultOperation = 1;
+      return resultOperation;
     }
     if (position! < 0) {
       int resultTransition = await db.insert(
           'BIBLIOTECA',
-          Book(path:path,
+          Book(
+                  path: path,
                   id: book.id,
                   title: book.title,
                   author: book.author,
@@ -90,14 +93,15 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
                   favorite: book.favorite)
               .toJsonDAO(),
           conflictAlgorithm: ConflictAlgorithm.replace);
-      return resultTransition;
+      resultOperation = 2;
+      return resultOperation;
     }
     return -1;
   }
 
   @override
   Future<int> favoriteToggle(Book book) async {
-    int isfavorite = 1;
+    int? isfavorite;
     final db = _database;
     if (book.favorite == 2) {
       isfavorite = 1;
@@ -105,13 +109,13 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
       isfavorite = 2;
     }
 
-    int resultTransition = await db.update(
+    await db.update(
       'BIBLIOTECA',
       {'FAVORITE': isfavorite},
       where: 'ID = ?',
       whereArgs: [book.id],
     );
-    return resultTransition;
+    return isfavorite;
   }
 
   @override

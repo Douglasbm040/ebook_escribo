@@ -16,6 +16,11 @@ abstract class _ControllerBase with Store {
   IRequestBookUseCase usecaseResquestBook = Modular.get<IRequestBookUseCase>();
   @observable
   int selectedIndex = 0;
+  @computed
+  ObservableList<bool> get favorits => booksFavorite
+      .map((e) => e.book?.favorite == 2 ? true : false)
+      .toList()
+      .asObservable();
 
   @observable
   ObservableList<BookController> booksRequested =
@@ -72,15 +77,19 @@ abstract class _ControllerBase with Store {
       int? transation;
       final response = await usecaseMangeBook.downloadBook(book, path!);
       response.fold((l) => null, (r) => transation = r);
-      if (transation! >= 0) {
-        await getAllDownloaded();
-        await getAllFavorite();
-        return "O livro foi baixado com sucesso !";
+      switch (transation) {
+        case 1:
+          await getAllDownloaded();
+          return "você já possue este livro";
+
+        case 2:
+          await getAllDownloaded();
+          return "O livro foi adicionado a sua lista de downloads";
+        default:
+          return "Erro ao baixar o livro,por favor verifique sua conexão";
       }
-      return "Erro ao baixar o livro ! verifique sua conexão";
-    } else {
-      return "O livro já foi baixado !";
     }
+    return "ops... ocorreu um erro ao baixar o livro, tente novamente mais tarde";
   }
 
   Future<void> initStateList() async {

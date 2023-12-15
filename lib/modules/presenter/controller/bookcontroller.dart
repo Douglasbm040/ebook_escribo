@@ -28,14 +28,28 @@ abstract class _BookControllerBase with Store {
     int? operation;
     final response = await usecaseMangeBook.favoriteToggle(book);
     response.fold((l) => null, (r) => operation = r);
-    if (operation! >= 0) {
-      if (book.favorite == 2) {
-        this.book = Book.fromBookEntity(book).copyWith(favorite: 1);
 
-        return;
-      }
-
-      this.book = Book.fromBookEntity(book).copyWith(favorite: 2);
+    if (operation == 2) {
+      this.book = BookEntity(
+          favorite: 2,
+          id: book.id,
+          title: book.title,
+          author: book.author,
+          coverUrl: book.coverUrl,
+          downloadUrl: book.downloadUrl);
+      print("cima");
+      print(this.book?.favorite.toString());
+      return;
     }
+  
+    this.book = BookEntity(
+        favorite: 1,
+        id: book.id,
+        title: book.title,
+        author: book.author,
+        coverUrl: book.coverUrl,
+        downloadUrl: book.downloadUrl);
+          print("abaixo");
+    print(this.book?.favorite.toString());
   }
 }

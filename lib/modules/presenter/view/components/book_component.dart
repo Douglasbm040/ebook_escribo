@@ -17,7 +17,6 @@ class BookComponent extends StatelessWidget {
   final int pages;
   @override
   Widget build(BuildContext context) {
-    final BookEntity book = itembook.book!;
     return Stack(
       children: [
         Card(
@@ -35,94 +34,106 @@ class BookComponent extends StatelessWidget {
                   child: InkWell(
                     onTap: () async {
                       if (pages == 0) {
-                        String texto =
-                            await Modular.get<Controller>().downloadBook(book);
-                        final snackBar = SnackBar(
+                        var snackBar = SnackBar(
+                          content: Text("Baixando ..."),
+                          duration: Duration(seconds: 5), // Duração da exibição
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        String texto = await Modular.get<Controller>()
+                            .downloadBook(itembook.book!);
+                        snackBar = SnackBar(
                           content: Text(texto),
                           duration: Duration(seconds: 3), // Duração da exibição
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       } else {
-                        Modular.to.pushNamed("/read", arguments: book);
+                        Modular.to.pushNamed("/read", arguments: itembook.book);
                       }
                     },
-                    child: SizedBox(
-                      width: 300,
-                      height: 250,
-                      child: Image(
-                          fit: BoxFit.fill,
-                          image: CachedNetworkImageProvider(
-                            book.coverUrl,
-                          ),
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-                            return const CircularProgressIndicator();
-                          }),
+                    child: Observer(builder: (context) {
+                      return SizedBox(
+                        width: 300,
+                        height: 250,
+                        child: Image(
+                            fit: BoxFit.fill,
+                            image: CachedNetworkImageProvider(
+                              itembook.book!.coverUrl,
+                            ),
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              return const CircularProgressIndicator();
+                            }),
+                      );
+                    }),
+                  ),
+                ),
+              ),
+              Observer(builder: (context) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    itembook.book!.title,
+                    style: const TextStyle(
+                        fontFamily: "Afacad",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.black),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                );
+              }),
+              Observer(builder: (context) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    itembook.book!.author,
+                    style: const TextStyle(
+                      fontFamily: "Afacad",
+                      fontSize: 14,
+                      color: Colors.black45,
                     ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  book.title,
-                  style: const TextStyle(
-                      fontFamily: "Afacad",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.black),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  book.author,
-                  style: const TextStyle(
-                    fontFamily: "Afacad",
-                    fontSize: 14,
-                    color: Colors.black45,
-                  ),
-                ),
-              ),
+                );
+              }),
             ],
           ),
         ),
-        Positioned(
-          right: -1,
-          child: 
-             InkWell(
-              onTap: () async {
-                await Modular.get<BookController>().isToggleFavorite(book);
-                final snackBar = SnackBar(
-                  content: Text(book.favorite == 2
-                      ? "Livro favoritado"
-                      : "Livro desfavoritado"),
-                  duration: const Duration(seconds: 3),
-                );
+        Observer(builder: (context) {
+          return Positioned(
+              right: -1,
+              child: InkWell(
+                onTap: () async {
+                  await Modular.get<BookController>()
+                      .isToggleFavorite(itembook.book!);
+                  final snackBar = SnackBar(
+                    content: Text(itembook.book!.favorite == 2
+                        ? "Livro favoritado"
+                        : "Livro desfavoritado"),
+                    duration: const Duration(seconds: 3),
+                  );
 
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              },
-              child: CircleAvatar(
-                radius: 25,
-                backgroundColor: Colors.grey[200],
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                },
                 child: CircleAvatar(
-                    radius: 22,
-                    backgroundColor: Colors.amber,
-                    child: Icon(
-                      book.favorite == 2
-                          ? Icons.bookmark_outlined
-                          : Icons.bookmark_rounded,
-                      color:
-                          book.favorite == 2 ? Colors.redAccent : Colors.white,
-                      size: 40,
-                    )),
-              ),
-            )
-         
-        )
+                  radius: 25,
+                  backgroundColor: Colors.grey[200],
+                  child: CircleAvatar(
+                      radius: 22,
+                      backgroundColor: Colors.amber,
+                      child: Icon(
+                        itembook.book!.favorite == 2
+                            ? Icons.bookmark_outlined
+                            : Icons.bookmark_rounded,
+                        color: itembook.book!.favorite == 2
+                            ? Colors.redAccent
+                            : Colors.white,
+                        size: 40,
+                      )),
+                ),
+              ));
+        })
       ],
     );
   }
