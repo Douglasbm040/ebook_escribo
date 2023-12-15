@@ -5,7 +5,7 @@ class AnimationTitle extends StatelessWidget {
   const AnimationTitle({
     super.key,
   });
-
+  
   @override
   Widget build(BuildContext context) {
     return Animate(

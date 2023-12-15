@@ -1,6 +1,6 @@
-
-
+import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
 import 'package:ebook_escribo/modules/domain/usecases/manager_books_usecase.dart';
+import 'package:ebook_escribo/modules/presenter/controller/bookcontroller.dart';
 import 'package:ebook_escribo/modules/presenter/view/home_view.dart';
 import 'package:ebook_escribo/modules/presenter/view/read_view.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -26,6 +26,8 @@ class AppModule extends Module {
     i.add<IRequestBookUseCase>(RequestBookUseCase.new);
     i.add<IManageBooksUseCase>(ManageBooksUseCase.new);
     i.add<Controller>(Controller.new);
+    i.add<BookController>(BookController.new);
+     i.add<BookEntity>(BookEntity.new);
   }
 
   @override
@@ -42,11 +44,15 @@ class AppModule extends Module {
 
     //!controller
     i.add<Controller>(Controller.new);
+    i.add<BookController>(BookController.new);
+
+    //!entities
+    i.add<BookEntity>(BookEntity.new);
   }
 
   @override
   void routes(r) {
     r.child('/', child: (context) => const HomeView(), children: []);
-    r.child('/read', child: (context)=>const ReadView());
+    r.child('/read', child: (context) => const ReadView());
   }
 }

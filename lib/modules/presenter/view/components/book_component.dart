@@ -1,20 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
+import 'package:ebook_escribo/modules/presenter/controller/bookcontroller.dart';
 import 'package:ebook_escribo/modules/presenter/controller/controller.dart';
 import 'package:ebook_escribo/modules/presenter/view/home_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class BookComponent extends StatelessWidget {
   const BookComponent({
     super.key,
-    required this.book,
+    required this.itembook,
     required this.pages,
   });
-  final BookEntity book;
+  final BookController itembook;
   final int pages;
   @override
   Widget build(BuildContext context) {
+    final BookEntity book = itembook.book!;
     return Stack(
       children: [
         Card(
@@ -32,7 +35,8 @@ class BookComponent extends StatelessWidget {
                   child: InkWell(
                     onTap: () async {
                       if (pages == 0) {
-                        String texto = await Modular.get<Controller>().downloadBook(book);
+                        String texto =
+                            await Modular.get<Controller>().downloadBook(book);
                         final snackBar = SnackBar(
                           content: Text(texto),
                           duration: Duration(seconds: 3), // Duração da exibição
@@ -88,33 +92,36 @@ class BookComponent extends StatelessWidget {
         ),
         Positioned(
           right: -1,
-          child: InkWell(
-            onTap: () async {
-              await Modular.get<Controller>().favoriteToggle(book);
-              final snackBar = SnackBar(
-                content: Text(book.favorite == 2
-                    ? "Livro favoritado"
-                    : "Livro desfavoritado"),
-                duration: const Duration(seconds: 3),
-              );
+          child: 
+             InkWell(
+              onTap: () async {
+                await Modular.get<BookController>().isToggleFavorite(book);
+                final snackBar = SnackBar(
+                  content: Text(book.favorite == 2
+                      ? "Livro favoritado"
+                      : "Livro desfavoritado"),
+                  duration: const Duration(seconds: 3),
+                );
 
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            child: CircleAvatar(
-              radius: 25,
-              backgroundColor: Colors.grey[200],
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
               child: CircleAvatar(
-                  radius: 22,
-                  backgroundColor: Colors.amber,
-                  child: Icon(
-                    book.favorite == 2
-                        ? Icons.bookmark_outlined
-                        : Icons.bookmark_rounded,
-                    color: book.favorite == 2 ? Colors.redAccent : Colors.white,
-                    size: 40,
-                  )),
-            ),
-          ),
+                radius: 25,
+                backgroundColor: Colors.grey[200],
+                child: CircleAvatar(
+                    radius: 22,
+                    backgroundColor: Colors.amber,
+                    child: Icon(
+                      book.favorite == 2
+                          ? Icons.bookmark_outlined
+                          : Icons.bookmark_rounded,
+                      color:
+                          book.favorite == 2 ? Colors.redAccent : Colors.white,
+                      size: 40,
+                    )),
+              ),
+            )
+         
         )
       ],
     );

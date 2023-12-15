@@ -16,11 +16,11 @@ abstract class _BookControllerBase with Store {
   @observable
   BookEntity? book;
 
-  Future<void> Function() onFavorite;
+  Future<List<BookEntity>?> Function()? onFavorite;
 
   _BookControllerBase({
-    required this.book,
-    required this.onFavorite,
+    this.book,
+    this.onFavorite,
   });
 
   @action
@@ -31,12 +31,11 @@ abstract class _BookControllerBase with Store {
     if (operation! >= 0) {
       if (book.favorite == 2) {
         this.book = Book.fromBookEntity(book).copyWith(favorite: 1);
-        await onFavorite();
+
         return;
       }
 
       this.book = Book.fromBookEntity(book).copyWith(favorite: 2);
-      await onFavorite();
     }
   }
 }

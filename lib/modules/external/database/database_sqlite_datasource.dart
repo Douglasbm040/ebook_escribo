@@ -49,7 +49,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   @override
   Future<List<BookEntity>?> getAllDownloaded() async {
     final db = _database;
- //db.delete("BIBLIOTECA");
+    //await db.delete("BIBLIOTECA");
     print("trazer tudo do banco");
     final List<Map<String, dynamic>> maps = await db.query("BIBLIOTECA");
     print(maps);
