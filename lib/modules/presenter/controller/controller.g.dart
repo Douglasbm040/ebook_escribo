@@ -9,14 +9,6 @@ part of 'controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$Controller on _ControllerBase, Store {
-  Computed<ObservableList<bool>>? _$favoritsComputed;
-
-  @override
-  ObservableList<bool> get favorits => (_$favoritsComputed ??=
-          Computed<ObservableList<bool>>(() => super.favorits,
-              name: '_ControllerBase.favorits'))
-      .value;
-
   late final _$selectedIndexAtom =
       Atom(name: '_ControllerBase.selectedIndex', context: context);
 
@@ -37,13 +29,13 @@ mixin _$Controller on _ControllerBase, Store {
       Atom(name: '_ControllerBase.booksRequested', context: context);
 
   @override
-  ObservableList<BookController> get booksRequested {
+  ObservableList<BookEntity> get booksRequested {
     _$booksRequestedAtom.reportRead();
     return super.booksRequested;
   }
 
   @override
-  set booksRequested(ObservableList<BookController> value) {
+  set booksRequested(ObservableList<BookEntity> value) {
     _$booksRequestedAtom.reportWrite(value, super.booksRequested, () {
       super.booksRequested = value;
     });
@@ -53,13 +45,13 @@ mixin _$Controller on _ControllerBase, Store {
       Atom(name: '_ControllerBase.booksDownloaded', context: context);
 
   @override
-  ObservableList<BookController> get booksDownloaded {
+  ObservableList<BookEntity> get booksDownloaded {
     _$booksDownloadedAtom.reportRead();
     return super.booksDownloaded;
   }
 
   @override
-  set booksDownloaded(ObservableList<BookController> value) {
+  set booksDownloaded(ObservableList<BookEntity> value) {
     _$booksDownloadedAtom.reportWrite(value, super.booksDownloaded, () {
       super.booksDownloaded = value;
     });
@@ -69,15 +61,63 @@ mixin _$Controller on _ControllerBase, Store {
       Atom(name: '_ControllerBase.booksFavorite', context: context);
 
   @override
-  ObservableList<BookController> get booksFavorite {
+  ObservableList<BookEntity> get booksFavorite {
     _$booksFavoriteAtom.reportRead();
     return super.booksFavorite;
   }
 
   @override
-  set booksFavorite(ObservableList<BookController> value) {
+  set booksFavorite(ObservableList<BookEntity> value) {
     _$booksFavoriteAtom.reportWrite(value, super.booksFavorite, () {
       super.booksFavorite = value;
+    });
+  }
+
+  late final _$favoriteRequestedAtom =
+      Atom(name: '_ControllerBase.favoriteRequested', context: context);
+
+  @override
+  ObservableList<BookController> get favoriteRequested {
+    _$favoriteRequestedAtom.reportRead();
+    return super.favoriteRequested;
+  }
+
+  @override
+  set favoriteRequested(ObservableList<BookController> value) {
+    _$favoriteRequestedAtom.reportWrite(value, super.favoriteRequested, () {
+      super.favoriteRequested = value;
+    });
+  }
+
+  late final _$favoriteDownloadedAtom =
+      Atom(name: '_ControllerBase.favoriteDownloaded', context: context);
+
+  @override
+  ObservableList<BookController> get favoriteDownloaded {
+    _$favoriteDownloadedAtom.reportRead();
+    return super.favoriteDownloaded;
+  }
+
+  @override
+  set favoriteDownloaded(ObservableList<BookController> value) {
+    _$favoriteDownloadedAtom.reportWrite(value, super.favoriteDownloaded, () {
+      super.favoriteDownloaded = value;
+    });
+  }
+
+  late final _$favoriteBooksAtom =
+      Atom(name: '_ControllerBase.favoriteBooks', context: context);
+
+  @override
+  ObservableList<BookController> get favoriteBooks {
+    _$favoriteBooksAtom.reportRead();
+    return super.favoriteBooks;
+  }
+
+  @override
+  set favoriteBooks(ObservableList<BookController> value) {
+    _$favoriteBooksAtom.reportWrite(value, super.favoriteBooks, () {
+      super.favoriteBooks = value;
     });
   }
 
@@ -113,12 +153,29 @@ mixin _$Controller on _ControllerBase, Store {
     return _$downloadBookAsyncAction.run(() => super.downloadBook(book));
   }
 
+  late final _$initStateListAsyncAction =
+      AsyncAction('_ControllerBase.initStateList', context: context);
+
+  @override
+  Future<void> initStateList() {
+    return _$initStateListAsyncAction.run(() => super.initStateList());
+  }
+
   late final _$onItemTappedAsyncAction =
       AsyncAction('_ControllerBase.onItemTapped', context: context);
 
   @override
   Future<void> onItemTapped(int index) {
     return _$onItemTappedAsyncAction.run(() => super.onItemTapped(index));
+  }
+
+  late final _$isToggleFavoriteAsyncAction =
+      AsyncAction('_ControllerBase.isToggleFavorite', context: context);
+
+  @override
+  Future<void> isToggleFavorite(BookEntity book, BookController controller) {
+    return _$isToggleFavoriteAsyncAction
+        .run(() => super.isToggleFavorite(book, controller));
   }
 
   @override
@@ -128,7 +185,9 @@ selectedIndex: ${selectedIndex},
 booksRequested: ${booksRequested},
 booksDownloaded: ${booksDownloaded},
 booksFavorite: ${booksFavorite},
-favorits: ${favorits}
+favoriteRequested: ${favoriteRequested},
+favoriteDownloaded: ${favoriteDownloaded},
+favoriteBooks: ${favoriteBooks}
     ''';
   }
 }

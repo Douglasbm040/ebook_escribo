@@ -27,7 +27,7 @@ class AppModule extends Module {
     i.add<IManageBooksUseCase>(ManageBooksUseCase.new);
     i.add<Controller>(Controller.new);
     i.add<BookController>(BookController.new);
-     i.add<BookEntity>(BookEntity.new);
+    i.add<BookEntity>(BookEntity.new);
   }
 
   @override
@@ -53,6 +53,8 @@ class AppModule extends Module {
   @override
   void routes(r) {
     r.child('/', child: (context) => const HomeView(), children: []);
-    r.child('/read', child: (context) => const ReadView());
+    r.child('/read',
+        child: (context) => const ReadView(),
+        transition: TransitionType.leftToRightWithFade);
   }
 }

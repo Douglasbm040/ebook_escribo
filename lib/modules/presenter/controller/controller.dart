@@ -1,6 +1,6 @@
 import 'package:ebook_escribo/modules/domain/usecases/request_book_usecase.dart';
+import 'package:ebook_escribo/modules/infra/model/book.dart';
 import 'package:ebook_escribo/modules/presenter/controller/bookcontroller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../domain/entity/book_entity.dart';
@@ -16,56 +16,70 @@ abstract class _ControllerBase with Store {
   IRequestBookUseCase usecaseResquestBook = Modular.get<IRequestBookUseCase>();
   @observable
   int selectedIndex = 0;
-  @computed
-  ObservableList<bool> get favorits => booksFavorite
-      .map((e) => e.book?.favorite == 2 ? true : false)
-      .toList()
-      .asObservable();
 
   @observable
-  ObservableList<BookController> booksRequested =
-      ObservableList<BookController>();
+  ObservableList<BookEntity> booksRequested = ObservableList<BookEntity>();
   @observable
-  ObservableList<BookController> booksDownloaded =
-      ObservableList<BookController>();
+  ObservableList<BookEntity> booksDownloaded = ObservableList<BookEntity>();
   @observable
-  ObservableList<BookController> booksFavorite =
-      ObservableList<BookController>();
+  ObservableList<BookEntity> booksFavorite = ObservableList<BookEntity>();
 
-  List<ObservableList<BookController>> listObserver() =>
+  List<ObservableList<BookEntity>> listObserver() =>
       [booksRequested, booksDownloaded, booksFavorite];
+
+  List<ObservableList<BookController>> listfavoriteObserver() =>
+      [favoriteRequested, favoriteDownloaded, favoriteBooks];
+
+  @observable
+  ObservableList<BookController> favoriteRequested =
+      ObservableList<BookController>();
+  @observable
+  ObservableList<BookController> favoriteDownloaded =
+      ObservableList<BookController>();
+  @observable
+  ObservableList<BookController> favoriteBooks =
+      ObservableList<BookController>();
 
   @action
   Future<List<BookEntity>?> getAllDownloaded() async {
-    print("1802983");
-    booksDownloaded = ObservableList<BookController>();
+    favoriteDownloaded.clear();
+    booksDownloaded.clear();
     List<BookEntity>? listBooks = [];
     final response = await usecaseMangeBook.getAllDownloaded();
     response.fold((l) => null, (r) => listBooks = r);
-    listBooks?.forEach((e) => booksDownloaded
-        .add(BookController(book: e, onFavorite: () => getAllFavorite())));
+    listBooks?.forEach((e) {
+      booksDownloaded.add(e);
+      favoriteDownloaded.add(
+          BookController(favorite: e.favorite == 1 ? true : false, id: e.id));
+    });
   }
 
   @action
   Future<List<BookEntity>?> getAllFavorite() async {
-    print("576576");
-    booksFavorite = ObservableList<BookController>();
+    booksFavorite.clear();
+    favoriteBooks.clear();
     List<BookEntity>? listBooks = [];
     final response = await usecaseMangeBook.getAllBooksFavorite();
     response.fold((l) => null, (r) => listBooks = r);
-    listBooks?.forEach((element) => booksFavorite.add(
-        BookController(book: element, onFavorite: () => getAllFavorite())));
+    listBooks?.forEach((e) {
+      booksFavorite.add(e);
+      favoriteBooks.add(
+          BookController(favorite: e.favorite == 1 ? true : false, id: e.id));
+    });
   }
 
   @action
   Future<List<BookEntity>?> getAllRequested() async {
-    print("sjdkfjah");
-    booksRequested = ObservableList<BookController>();
+    booksRequested.clear();
+    favoriteRequested.clear();
     List<BookEntity>? _booksRequested = [];
     final response = await usecaseResquestBook.getBooks("/books.json");
     response.fold((l) => null, (r) => _booksRequested = r);
-    _booksRequested?.forEach((e) => booksRequested
-        .add(BookController(book: e, onFavorite: () => getAllFavorite())));
+    _booksRequested?.forEach((e) {
+      booksRequested.add(e);
+      favoriteRequested.add(
+          BookController(favorite: e.favorite == 1 ? true : false, id: e.id));
+    });
   }
 
   @action
@@ -79,11 +93,12 @@ abstract class _ControllerBase with Store {
       response.fold((l) => null, (r) => transation = r);
       switch (transation) {
         case 1:
-          await getAllDownloaded();
+          initStateList();
           return "você já possue este livro";
 
         case 2:
-          await getAllDownloaded();
+          initStateList();
+
           return "O livro foi adicionado a sua lista de downloads";
         default:
           return "Erro ao baixar o livro,por favor verifique sua conexão";
@@ -92,10 +107,11 @@ abstract class _ControllerBase with Store {
     return "ops... ocorreu um erro ao baixar o livro, tente novamente mais tarde";
   }
 
+  @action
   Future<void> initStateList() async {
-    getAllDownloaded();
-    getAllFavorite();
-    getAllRequested();
+    await getAllDownloaded();
+    await getAllFavorite();
+    await getAllRequested();
   }
 
   @action
@@ -115,5 +131,23 @@ abstract class _ControllerBase with Store {
         break;
       default:
     }
+  }
+
+  @action
+  Future<void> isToggleFavorite(
+      BookEntity book, BookController controller) async {
+    int insertfavorite = controller.favorite ? 2 : 1;
+    print("qual valor esta entrando $insertfavorite");
+    await usecaseMangeBook.favoriteToggle(Book(
+        id: book.id,
+        title: book.title,
+        author: book.author,
+        coverUrl: book.coverUrl,
+        downloadUrl: book.downloadUrl,
+        favorite: insertfavorite));
+    controller.isToggleFavorite();
+    await initStateList();
+
+    print("qual ta saindo ${controller.favorite}");
   }
 }

@@ -49,28 +49,23 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   @override
   Future<List<BookEntity>?> getAllDownloaded() async {
     final db = _database;
-    await db.delete("BIBLIOTECA");
-    print("trazer tudo do banco");
+
     final List<Map<String, dynamic>> maps = await db.query("BIBLIOTECA");
     print(maps);
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));
-
     return listbookAll;
   }
 
   @override
   Future<int> downloadBook(Book book, String path) async {
     int resultOperation = -1;
-    print("baixar para o banco");
     final db = _database;
+
     final listBookDownloaded = await getAllDownloaded();
     int? position =
         listBookDownloaded?.indexWhere((element) => element.id == book.id);
     if (position != null && position >= 0 && path.isNotEmpty) {
-      print("atualizar o banco");
-      print(path);
-      print(book.id);
       await db.update(
         'BIBLIOTECA',
         {'PATH': path},
@@ -81,7 +76,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
       return resultOperation;
     }
     if (position! < 0) {
-      int resultTransition = await db.insert(
+      await db.insert(
           'BIBLIOTECA',
           Book(
                   path: path,
@@ -101,21 +96,56 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
 
   @override
   Future<int> favoriteToggle(Book book) async {
-    int? isfavorite;
+    int resultOperation = -1;
     final db = _database;
-    if (book.favorite == 2) {
-      isfavorite = 1;
-    } else {
-      isfavorite = 2;
-    }
+    db.delete("BIBLIOTECA");
 
+    final listBookDownloaded = await getAllDownloaded();
+    int? position =
+        listBookDownloaded?.indexWhere((element) => element.id == book.id);
+    if (position != null && position >= 0) {
+      if (book.favorite==1) {
+        db.delete(
+          'BIBLIOTECA',
+          where: 'ID = ?',
+          whereArgs: [book.id],
+        );
+        return 0;
+        
+      }
+      await db.update(
+        'BIBLIOTECA',
+        {'FAVORITE': book.favorite},
+        where: 'ID = ?',
+        whereArgs: [book.id],
+      );
+      resultOperation = 1;
+      return resultOperation;
+    }
+    if (position! < 0) {
+      await db.insert(
+          'BIBLIOTECA',
+          Book(
+                  id: book.id,
+                  title: book.title,
+                  author: book.author,
+                  coverUrl: book.coverUrl,
+                  downloadUrl: book.downloadUrl,
+                  favorite: book.favorite)
+              .toJsonDAO(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
+      resultOperation = 2;
+      return resultOperation;
+    }
+    return -1;
+    /* final db = _database;
     await db.update(
       'BIBLIOTECA',
-      {'FAVORITE': isfavorite},
+      {'FAVORITE': book.favorite},
       where: 'ID = ?',
       whereArgs: [book.id],
     );
-    return isfavorite;
+    return 1;*/
   }
 
   @override
@@ -123,7 +153,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
     final db = _database;
     final List<Map<String, dynamic>> maps = await db.query(
       "BIBLIOTECA",
-      where: "FAVORITE = 2",
+      where: "FAVORITE = 1",
     );
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));

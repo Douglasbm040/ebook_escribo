@@ -11,9 +11,11 @@ class GridViewComponent extends StatefulWidget {
     super.key,
     required this.listBook,
     required this.pages,
+    required this.listEntity,
   });
   final int pages;
   final ObservableList<BookController> listBook;
+  final ObservableList<BookEntity> listEntity;
 
   @override
   State<GridViewComponent> createState() => _GridViewComponentState();
@@ -30,14 +32,15 @@ class _GridViewComponentState extends State<GridViewComponent> {
             crossAxisSpacing: 5.0,
             mainAxisSpacing: 5.0,
             childAspectRatio: .6),
-        itemCount: widget.listBook.length,
+        itemCount: widget.listEntity.length,
         itemBuilder: (BuildContext context, int index) {
-          return widget.listBook?[index] == null
+          return widget.listEntity[index] == null
               ? const AnimationBookLoading()
-              : Observer(builder: (_) {
-                  return BookComponent(
-                      itembook: widget.listBook![index], pages: widget.pages);
-                });
+              : BookComponent(
+                  itembook: widget.listEntity[index],
+                  pages: widget.pages,
+                  controller: widget.listBook[index],
+                );
         },
       ),
     );

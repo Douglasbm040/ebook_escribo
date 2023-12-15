@@ -14,8 +14,10 @@ class libraryComponent extends StatefulWidget {
     super.key,
     required this.controller,
     required this.page,
+    required this.controllerBook,
   });
   final ObservableList<BookController> controller;
+  final ObservableList<BookEntity> controllerBook;
   final int page;
 
   @override
@@ -30,7 +32,7 @@ class _libraryComponentState extends State<libraryComponent> {
   Widget build(BuildContext context) {
     return SizedBox(
       child: Observer(builder: (context) {
-        return widget.controller.isEmpty
+        return widget.controllerBook.isEmpty
             ? const AnimationIsEmpty()
             : Column(
                 children: [
@@ -56,7 +58,9 @@ class _libraryComponentState extends State<libraryComponent> {
                     ),
                   ),
                   GridViewComponent(
-                      listBook: widget.controller, pages: widget.page),
+                      listEntity: widget.controllerBook,
+                      listBook: widget.controller,
+                      pages: widget.page),
                 ],
               );
       }),

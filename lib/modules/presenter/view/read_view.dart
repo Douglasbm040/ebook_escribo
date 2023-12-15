@@ -29,7 +29,7 @@ class _ReadViewState extends State<ReadView> {
       scrollDirection: EpubScrollDirection.ALLDIRECTIONS,
       allowSharing: true,
       enableTts: true,
-      nightMode: true,
+      nightMode: false,
     );
 
     // get current locator
@@ -119,13 +119,84 @@ class _ReadViewState extends State<ReadView> {
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.amberAccent,
+                            ),
                             onPressed: () {
                               initReadEpub(book.path!);
                             },
-                            child: Container(
+                            child: const SizedBox(
                               height: 80,
                               width: 230,
-                              child: Center(child: Text("Read")),
+                              child: Center(
+                                  child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Toque para ler",
+                                    style: TextStyle(
+                                        fontFamily: "Afacad",
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                                      child: CircleAvatar(
+                                        radius: 25,
+                                        backgroundColor: Colors.amber,
+                                        child: CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            radius: 20,
+                                            child: Icon(
+                                              Icons.menu_book,
+                                            )),
+                                      ))
+                                ],
+                              )),
+                            )),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.deepOrangeAccent[100]),
+                            onPressed: () {
+                            Modular.to.pop();
+                            },
+                            child: SizedBox(
+                              height: 80,
+                              width: 230,
+                              child: Center(
+                                  child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    "Voltar",
+                                    style: TextStyle(
+                                        fontFamily: "Afacad",
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          50, 0, 0, 0),
+                                      child: CircleAvatar(
+                                        radius: 25,
+                                        backgroundColor:
+                                            Colors.deepOrangeAccent[200],
+                                        child: const CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            radius: 20,
+                                            child: Icon(
+                                              Icons.arrow_back,
+                                            )),
+                                      ))
+                                ],
+                              )),
                             )),
                       )
                     ],

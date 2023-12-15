@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
 import 'package:ebook_escribo/modules/domain/usecases/manager_books_usecase.dart';
 import 'package:ebook_escribo/modules/infra/model/book.dart';
+import 'package:ebook_escribo/modules/presenter/controller/controller.dart';
 
 part 'bookcontroller.g.dart';
 
@@ -12,44 +13,32 @@ class BookController = _BookControllerBase with _$BookController;
 
 abstract class _BookControllerBase with Store {
   IManageBooksUseCase usecaseMangeBook = Modular.get<IManageBooksUseCase>();
-
+  Controller controller = Modular.get<Controller>();
   @observable
-  BookEntity? book;
+  bool favorite;
 
-  Future<List<BookEntity>?> Function()? onFavorite;
-
+  int id;
   _BookControllerBase({
-    this.book,
-    this.onFavorite,
+    required this.favorite,
+    required this.id,
   });
 
   @action
-  Future<void> isToggleFavorite(BookEntity book) async {
-    int? operation;
-    final response = await usecaseMangeBook.favoriteToggle(book);
-    response.fold((l) => null, (r) => operation = r);
+  _BookControllerBase? atualizar(int favorite) {
+    this.favorite = favorite == 2 ? false : true;
+  }
 
-    if (operation == 2) {
-      this.book = BookEntity(
-          favorite: 2,
-          id: book.id,
-          title: book.title,
-          author: book.author,
-          coverUrl: book.coverUrl,
-          downloadUrl: book.downloadUrl);
-      print("cima");
-      print(this.book?.favorite.toString());
-      return;
+  @action
+  setState(int? favorite) {
+    if (favorite == null) {
+      this.favorite = false;
+    } else {
+      this.favorite = favorite == 2 ? true : false;
     }
-  
-    this.book = BookEntity(
-        favorite: 1,
-        id: book.id,
-        title: book.title,
-        author: book.author,
-        coverUrl: book.coverUrl,
-        downloadUrl: book.downloadUrl);
-          print("abaixo");
-    print(this.book?.favorite.toString());
+  }
+
+  @action
+  isToggleFavorite() {
+    favorite = !favorite;
   }
 }

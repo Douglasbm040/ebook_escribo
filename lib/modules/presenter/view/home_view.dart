@@ -33,7 +33,10 @@ class _HomeViewState extends State<HomeView> {
           return SafeArea(
             child: libraryComponent(
               page: controller.selectedIndex,
-              controller: controller.listObserver()[controller.selectedIndex],
+              controllerBook:
+                  controller.listObserver()[controller.selectedIndex],
+              controller:
+                  controller.listfavoriteObserver()[controller.selectedIndex],
             ),
           );
         }),
