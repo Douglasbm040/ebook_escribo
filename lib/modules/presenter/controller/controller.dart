@@ -1,16 +1,22 @@
 import 'package:ebook_escribo/modules/domain/usecases/request_book_usecase.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../domain/entity/book_entity.dart';
 import '../../domain/usecases/manager_books_usecase.dart';
 
-class Controller {
+import 'package:mobx/mobx.dart';
+part 'controller.g.dart';
+
+class Controller = _ControllerBase with _$Controller;
+
+abstract class _ControllerBase with Store {
   IManageBooksUseCase usecaseMangeBook = Modular.get<IManageBooksUseCase>();
   IRequestBookUseCase usecaseResquestBook = Modular.get<IRequestBookUseCase>();
 
-  List<BookEntity>? _booksRequested = [];
-  List<BookEntity>? _booksDownloaded = [];
-  List<BookEntity>? _booksFavorite = [];
+  List<BookController> booksRequested = [];
+  List<BookController> booksDownloaded = [];
+  List<BookController> booksFavorite = [];
 
   Future<List<BookEntity>?> getAllDownloaded() async {
     final response = await usecaseMangeBook.getAllDownloaded();
@@ -34,11 +40,14 @@ class Controller {
     String? path;
     final response = await usecaseResquestBook.downloadBook(book.downloadUrl);
     response.fold((l) => null, (r) => path = r);
-    if (path != null) {
+    if (path != null || path!.isNotEmpty) {
       int? transation;
       final response = await usecaseMangeBook.downloadBook(book, path!);
       response.fold((l) => null, (r) => transation = r);
-      if (transation != null) {
+      if (transation! >= 0) {
+        getAllDownloaded();
+        getAllFavorite();
+        getAllFavorite();
         return "O livro foi baixado com sucesso !";
       }
       return "Erro ao baixar o livro ! verifique sua conexão";

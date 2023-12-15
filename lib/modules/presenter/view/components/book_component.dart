@@ -32,14 +32,14 @@ class BookComponent extends StatelessWidget {
                   child: InkWell(
                     onTap: () async {
                       if (pages == 0) {
+                        String texto = await Modular.get<Controller>().downloadBook(book);
                         final snackBar = SnackBar(
-                          content: Text(await Modular.get<Controller>()
-                              .downloadBook(book)),
+                          content: Text(texto),
                           duration: Duration(seconds: 3), // Duração da exibição
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       } else {
-                        Modular.to.pushNamed("/read",arguments: book);
+                        Modular.to.pushNamed("/read", arguments: book);
                       }
                     },
                     child: SizedBox(

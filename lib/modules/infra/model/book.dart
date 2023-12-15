@@ -53,6 +53,8 @@ class Book extends BookEntity {
     data['AUTHOR'] = author;
     data['COVER_URL'] = coverUrl;
     data['DOWNLOAD_URL'] = downloadUrl;
+    data['FAVORITE'] = favorite;
+    data['PATH'] = path;
     return data;
   }
 

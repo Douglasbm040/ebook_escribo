@@ -39,6 +39,7 @@ class HttpDatasource implements IRequestBookDatasource {
 
         final File file = File(downloadPath);
         await file.writeAsBytes(response.bodyBytes);
+        Future.delayed(const Duration(seconds: 1));
 
         return downloadPath;
       } else {

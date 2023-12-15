@@ -1,6 +1,4 @@
-import 'package:ebook_escribo/modules/presenter/view/home_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 

@@ -49,6 +49,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   @override
   Future<List<BookEntity>?> getAllDownloaded() async {
     final db = _database;
+ //db.delete("BIBLIOTECA");
     print("trazer tudo do banco");
     final List<Map<String, dynamic>> maps = await db.query("BIBLIOTECA");
     print(maps);
@@ -65,7 +66,10 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
     final listBookDownloaded = await getAllDownloaded();
     int? position =
         listBookDownloaded?.indexWhere((element) => element.id == book.id);
-    if (position != null && position >= 0) {
+    if (position != null && position >= 0 && path.isNotEmpty) {
+      print("atualizar o banco");
+      print(path);
+      print(book.id);
       int resultTransition = await db.update(
         'BIBLIOTECA',
         {'PATH': path},
@@ -74,11 +78,21 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
       );
       return resultTransition;
     }
-
-    int resultTransition = await db.insert('BIBLIOTECA', book.toJsonDAO(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
-
-    return resultTransition;
+    if (position! < 0) {
+      int resultTransition = await db.insert(
+          'BIBLIOTECA',
+          Book(path:path,
+                  id: book.id,
+                  title: book.title,
+                  author: book.author,
+                  coverUrl: book.coverUrl,
+                  downloadUrl: book.downloadUrl,
+                  favorite: book.favorite)
+              .toJsonDAO(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
+      return resultTransition;
+    }
+    return -1;
   }
 
   @override
