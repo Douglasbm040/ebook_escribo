@@ -10,11 +10,10 @@ class ManagerBookRepositoryImpl implements IManageBookRepository {
   IManagerBookDatasource managerBookDatasource;
   ManagerBookRepositoryImpl({required this.managerBookDatasource});
   @override
-  Future<Either<FailureDownloadBook, int>> downloadBooks(
-      BookEntity book) async {
+  Future<Either<FailureDownloadBook, int>> downloadBook(
+      BookEntity book,String path) async {
     int resultOperation =
-        await managerBookDatasource.downloadBooks(Book.fromBookEntity(book)) ??
-            -1;
+        await managerBookDatasource.downloadBook(Book.fromBookEntity(book), path); ;
     if (resultOperation >= 0) {
       return right(resultOperation);
     } else {

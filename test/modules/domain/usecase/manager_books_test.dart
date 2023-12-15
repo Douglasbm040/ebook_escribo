@@ -25,9 +25,10 @@ void main() {
           author: "as",
           coverUrl: "qweqw",
           downloadUrl: "asdas");
-      when(() => mock.downloadBooks(paramm))
+      when(() => mock.downloadBook(paramm, "C:\\Users\\Douglas\\Downloads"))
           .thenAnswer((_) async => const Right<FailureDownloadBook, int>(1));
-      final result = await usecase.downloadBooks(paramm);
+      final result =
+          await usecase.downloadBook(paramm, "C:\\Users\\Douglas\\Downloads");
       expect(result.isRight(), true);
     });
     test("deve retornar um erro no download", () async {
@@ -38,9 +39,9 @@ void main() {
           author: "as",
           coverUrl: "qweqw",
           downloadUrl: "asdas");
-      when(() => mock.downloadBooks(paramm)).thenAnswer(
+      when(() => mock.downloadBook(paramm,"C:\\Users\\Douglas\\Downloads")).thenAnswer(
           (_) async => Left<FailureDownloadBook, int>(InsertErrorBook()));
-      final result = await usecase.downloadBooks(paramm);
+      final result = await usecase.downloadBook(paramm,"C:\\Users\\Douglas\\Downloads");
       expect(result.isLeft(), true);
     });
   });

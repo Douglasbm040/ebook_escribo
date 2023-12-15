@@ -30,13 +30,20 @@ class Controller {
     return _booksRequested;
   }
 
-  Future<int> downloadBooks(BookEntity book, String url) async {
-    final responseURL = await usecaseResquestBook.getBooks(url);
-    responseURL.fold((l) => null, (r) => _booksRequested = r);
-    final  responseTransaction = await usecaseMangeBook.downloadBooks(book);
-    return responseTransaction.fold((l) => 0, (r) => r);
+  Future<String> downloadBook(BookEntity book) async {
+    String? path;
+    final response = await usecaseResquestBook.downloadBook(book.downloadUrl);
+    response.fold((l) => null, (r) => path = r);
+    if (path != null) {
+      int? transation;
+      final response = await usecaseMangeBook.downloadBook(book, path!);
+      response.fold((l) => null, (r) => transation = r);
+      if (transation != null ) {
+        return "O livro foi baixado com sucesso !";
+      }
+      return "Erro ao baixar o livro ! verifique sua conexão";
+    } else {
+      return "O livro já foi baixado !";
+    }
   }
-
-
-
 }

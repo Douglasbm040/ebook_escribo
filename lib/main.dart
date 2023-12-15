@@ -9,5 +9,9 @@ main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final database = await DatabaseSqliteDatasource.getInstance();
   runApp(
-      ModularApp(module: AppModule(() => database), child: const AppWidget()));
+    ModularApp(
+      module: AppModule(() => database),
+      child: const AppWidget(),
+    ),
+  );
 }

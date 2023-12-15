@@ -6,7 +6,8 @@ import '../repositories/imanage_book_repository.dart';
 
 abstract class IManageBooksUseCase {
   Future<Either<FailureDownloadBook, List<BookEntity>?>> getAllDownloaded();
-  Future<Either<FailureDownloadBook, int>> downloadBooks(BookEntity book);
+  Future<Either<FailureDownloadBook, int>> downloadBook(
+      BookEntity book, String path);
   Future<Either<FailureDownloadBook, int>> favoriteToggle(BookEntity book);
   Future<Either<FailureDownloadBook, List<BookEntity>?>> getAllBooksFavorite();
 }
@@ -18,9 +19,9 @@ class ManageBooksUseCase implements IManageBooksUseCase {
   });
 
   @override
-  Future<Either<FailureDownloadBook, int>> downloadBooks(
-      BookEntity book) async {
-    return await manageBookRepository.downloadBooks(book);
+   Future<Either<FailureDownloadBook, int>> downloadBook(
+      BookEntity book,String path) async {
+    return await manageBookRepository.downloadBook(book,path);
   }
 
   @override

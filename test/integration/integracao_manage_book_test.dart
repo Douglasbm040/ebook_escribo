@@ -14,13 +14,13 @@ void main() async {
   late IManageBooksUseCase usecase;
   late Book paramm;
   databaseFactory = databaseFactoryFfi;
-  /*Database database =
+  Database database =
       await databaseFactoryFfi.openDatabase(inMemoryDatabasePath);
-  database.execute(DatabaseSqliteDatasource.BIBLIOTECA);*/
-  DatabaseSqliteDatasource database =
-      await DatabaseSqliteDatasource.getInstance();
+  database.execute(DatabaseSqliteDatasource.BIBLIOTECA);
+  /*DatabaseSqliteDatasource database =
+      await DatabaseSqliteDatasource.getInstance();*/
   setUp(() async {
-    Modular.bindModule(AppModule((() => database)));
+    Modular.bindModule(AppModule(() => DatabaseSqliteDatasource(database)));
     usecase = Modular.get<IManageBooksUseCase>();
 
     paramm = Book(
@@ -37,7 +37,7 @@ void main() async {
     expect(teste.isRight(), true);
   });
   test('Deve inserir um livro', () async {
-    var teste = await usecase.downloadBooks(paramm);
+    var teste = await usecase.downloadBook(paramm,"");
     expect(teste.isRight(), true);
   });
   test('Deve retornar uma lista de livros favoritos', () async {

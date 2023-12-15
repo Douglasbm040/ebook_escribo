@@ -5,8 +5,11 @@ class BookEntity {
   final String coverUrl;
   final String downloadUrl;
   final int favorite;
+  final String? path;
 
-  BookEntity({required this.favorite, 
+  BookEntity(
+      {this.path,
+      required this.favorite,
       required this.id,
       required this.title,
       required this.author,

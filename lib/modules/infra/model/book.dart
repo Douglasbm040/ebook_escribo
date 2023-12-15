@@ -2,13 +2,14 @@ import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
 
 class Book extends BookEntity {
   Book({
+    String? path,
     required int id,
     required String title,
     required String author,
     required String coverUrl,
     required String downloadUrl,
     required int favorite,
-  }) : super(
+  }) : super(path: path,
             id: id,
             title: title,
             author: author,
@@ -17,7 +18,7 @@ class Book extends BookEntity {
             favorite: favorite);
 
   Book.fromJsonDAO(Map<String, dynamic> json)
-      : super(
+      : super(path: json["PATH"],
             id: json['ID'],
             title: json['TITLE'],
             author: json['AUTHOR'],
@@ -35,6 +36,7 @@ class Book extends BookEntity {
 
   Book.fromBookEntity(BookEntity book)
       : super(
+            path: book.path,
             id: book.id,
             title: book.title,
             author: book.author,

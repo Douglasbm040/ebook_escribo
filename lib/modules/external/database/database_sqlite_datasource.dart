@@ -34,12 +34,14 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   }
 
   static String get BIBLIOTECA => '''
+
       CREATE TABLE IF NOT EXISTS BIBLIOTECA (
         ID INTEGER,
         TITLE TEXT,
         AUTHOR TEXT,
         COVER_URL TEXT,
         DOWNLOAD_URL TEXT,
+        PATH TEXT,
         FAVORITE INTEGER DEFAULT 1
       )
     ''';
@@ -48,6 +50,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   Future<List<BookEntity>?> getAllDownloaded() async {
     final db = _database;
     final List<Map<String, dynamic>> maps = await db.query("BIBLIOTECA");
+    print(maps);
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));
 
@@ -55,10 +58,24 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   }
 
   @override
-  Future<int> downloadBooks(Book book) async {
+  Future<int> downloadBook(Book book, String path) async {
     final db = _database;
+    final listBookDownloaded = await getAllDownloaded();
+    int? position =
+        listBookDownloaded?.indexWhere((element) => element.id == book.id);
+    if (position != null && position >= 0) {
+      int resultTransition = await db.update(
+        'BIBLIOTECA',
+        {'PATH': path},
+        where: 'ID = ?',
+        whereArgs: [book.id],
+      );
+      return resultTransition;
+    }
+
     int resultTransition = await db.insert('BIBLIOTECA', book.toJsonDAO(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+
     return resultTransition;
   }
 
@@ -82,7 +99,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
     final List<Map<String, dynamic>> maps = await db.query(
       "BIBLIOTECA",
       where: "FAVORITE = ?",
-      whereArgs: [1],
+      whereArgs: [2],
     );
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));

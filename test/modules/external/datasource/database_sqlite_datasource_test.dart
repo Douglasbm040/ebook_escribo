@@ -15,13 +15,15 @@ void main() {
     datasource = DatabaseSqliteDatasource(database);
   });
   test("Deve fazer a inserção de um livro", () async {
-    await datasource.downloadBooks(Book.fromBookEntity(BookEntity(
-        favorite: 1,
-        id: 1,
-        title: "test",
-        author: "as",
-        coverUrl: "qweqw",
-        downloadUrl: "asdas")));
+    await datasource.downloadBook(
+        Book.fromBookEntity(BookEntity(
+            favorite: 1,
+            id: 1,
+            title: "test",
+            author: "as",
+            coverUrl: "qweqw",
+            downloadUrl: "asdas")),
+        "C:\\Users\\Douglas\\Downloads");
     expect(await datasource.getAllDownloaded(), isA<List<BookEntity>>());
   });
   test("Deve recuperar o livro do banco", () async {
