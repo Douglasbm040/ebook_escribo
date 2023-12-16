@@ -17,10 +17,10 @@ abstract class _BookControllerBase with Store {
   @observable
   bool favorite;
 
-  int id;
+ 
   _BookControllerBase({
     required this.favorite,
-    required this.id,
+ 
   });
 
   @action

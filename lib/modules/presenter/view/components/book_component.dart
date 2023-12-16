@@ -59,14 +59,22 @@ class _BookComponentState extends State<BookComponent> {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         } else {
-                          Modular.to
-                              .pushNamed("/read", arguments: widget.itembook);
+                          if (widget.itembook.path != null) {
+                            Modular.to
+                                .pushNamed("/read", arguments: widget.itembook);
+                          }
+                          int x = 0;
+                          while (widget.itembook.path != null || x == 4) {
+                            String texto = await Modular.get<Controller>()
+                                .downloadBook(widget.itembook);
+                            x++;
+                          }
                         }
                       },
                       child: SizedBox(
                         width: 300,
                         height: 250,
-                        child: Image(
+                        child:  Image(
                             fit: BoxFit.fill,
                             image: CachedNetworkImageProvider(
                               widget.itembook.coverUrl,
@@ -129,10 +137,10 @@ class _BookComponentState extends State<BookComponent> {
                       radius: 22,
                       backgroundColor: Colors.amber,
                       child: Icon(
-                        !bookcontroller.favorite
+                        bookcontroller.favorite
                             ? Icons.bookmark_outlined
                             : Icons.bookmark_rounded,
-                        color: !bookcontroller.favorite
+                        color: bookcontroller.favorite
                             ? Colors.redAccent
                             : Colors.white,
                         size: 40,

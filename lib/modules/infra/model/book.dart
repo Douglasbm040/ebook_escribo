@@ -4,12 +4,12 @@ import 'package:ebook_escribo/modules/presenter/controller/bookcontroller.dart';
 class Book extends BookEntity {
   Book({
     String? path,
+    int? favorite,
     required int id,
     required String title,
     required String author,
     required String coverUrl,
     required String downloadUrl,
-    required int favorite,
   }) : super(
             path: path,
             id: id,
@@ -17,7 +17,7 @@ class Book extends BookEntity {
             author: author,
             coverUrl: coverUrl,
             downloadUrl: downloadUrl,
-            favorite: favorite);
+            favorite: favorite ?? 2);
 
   Book.fromJsonDAO(Map<String, dynamic> json)
       : super(
@@ -27,15 +27,15 @@ class Book extends BookEntity {
             author: json['AUTHOR'],
             coverUrl: json['COVER_URL'],
             downloadUrl: json['DOWNLOAD_URL'],
-            favorite: 1);
+            favorite: json['FAVORITE']);
   Book.fromJsonRequest(Map<String, dynamic> json)
       : super(
-            id: json['id'],
-            title: json['title'],
-            author: json['author'],
-            coverUrl: json['cover_url'],
-            downloadUrl: json['download_url'],
-            favorite: 1);
+          id: json['id'],
+          title: json['title'],
+          author: json['author'],
+          coverUrl: json['cover_url'],
+          downloadUrl: json['download_url'],
+         favorite: 2);
 
   Book.fromBookEntity(BookEntity book)
       : super(
@@ -78,6 +78,4 @@ class Book extends BookEntity {
       favorite: favorite ?? this.favorite,
     );
   }
-
-
 }

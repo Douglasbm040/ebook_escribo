@@ -47,11 +47,13 @@ abstract class _ControllerBase with Store {
     List<BookEntity>? listBooks = [];
     final response = await usecaseMangeBook.getAllDownloaded();
     response.fold((l) => null, (r) => listBooks = r);
-    listBooks?.forEach((e) {
+    for (var e in listBooks!) {
       booksDownloaded.add(e);
-      favoriteDownloaded.add(
-          BookController(favorite: e.favorite == 1 ? true : false, id: e.id));
-    });
+      if (e.favorite == 1) {
+        favoriteDownloaded.add(BookController(favorite: true));
+      }
+      favoriteDownloaded.add(BookController(favorite: false));
+    }
   }
 
   @action
@@ -61,11 +63,13 @@ abstract class _ControllerBase with Store {
     List<BookEntity>? listBooks = [];
     final response = await usecaseMangeBook.getAllBooksFavorite();
     response.fold((l) => null, (r) => listBooks = r);
-    listBooks?.forEach((e) {
+    for (var e in listBooks!) {
       booksFavorite.add(e);
-      favoriteBooks.add(
-          BookController(favorite: e.favorite == 1 ? true : false, id: e.id));
-    });
+      if (e.favorite == 1) {
+        favoriteBooks.add(BookController(favorite: true));
+      }
+      favoriteBooks.add(BookController(favorite: false));
+    }
   }
 
   @action
@@ -75,11 +79,22 @@ abstract class _ControllerBase with Store {
     List<BookEntity>? _booksRequested = [];
     final response = await usecaseResquestBook.getBooks("/books.json");
     response.fold((l) => null, (r) => _booksRequested = r);
-    _booksRequested?.forEach((e) {
+    List<BookEntity>? listBooks = [];
+    final responses = await usecaseMangeBook.getAllBooksFavorite();
+    responses.fold((l) => null, (r) => listBooks = r);
+
+    for (var e in _booksRequested ?? []) {
       booksRequested.add(e);
-      favoriteRequested.add(
-          BookController(favorite: e.favorite == 1 ? true : false, id: e.id));
-    });
+      for (var i in listBooks ?? []) {
+        if (i.id == e.id) {
+          favoriteRequested.add(BookController(favorite: true));
+          continue;
+        }
+      }
+    }
+for (var i = 0; i < _booksRequested!.length - listBooks!.length; i++) {
+  favoriteRequested.add(BookController(favorite: false));
+}
   }
 
   @action
@@ -137,7 +152,7 @@ abstract class _ControllerBase with Store {
   Future<void> isToggleFavorite(
       BookEntity book, BookController controller) async {
     int insertfavorite = controller.favorite ? 2 : 1;
-    print("qual valor esta entrando $insertfavorite");
+
     await usecaseMangeBook.favoriteToggle(Book(
         id: book.id,
         title: book.title,
@@ -147,7 +162,5 @@ abstract class _ControllerBase with Store {
         favorite: insertfavorite));
     controller.isToggleFavorite();
     await initStateList();
-
-    print("qual ta saindo ${controller.favorite}");
   }
 }

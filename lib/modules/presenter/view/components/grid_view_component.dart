@@ -34,9 +34,7 @@ class _GridViewComponentState extends State<GridViewComponent> {
             childAspectRatio: .6),
         itemCount: widget.listEntity.length,
         itemBuilder: (BuildContext context, int index) {
-          return widget.listEntity[index] == null
-              ? const AnimationBookLoading()
-              : BookComponent(
+          return  BookComponent(
                   itembook: widget.listEntity[index],
                   pages: widget.pages,
                   controller: widget.listBook[index],

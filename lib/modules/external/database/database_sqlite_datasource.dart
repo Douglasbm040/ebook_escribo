@@ -22,7 +22,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
     if (_instance == null) {
       sqfliteFfiInit();
       Database database = await openDatabase(
-        join(await getDatabasesPath(), 'BIBLIOTECA.db'),
+        join(await getDatabasesPath(), 'BIBLIOTECA_EPUB.db'),
         onCreate: (db, version) async {
           await db.execute(BIBLIOTECA);
         },
@@ -42,7 +42,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
         COVER_URL TEXT,
         DOWNLOAD_URL TEXT,
         PATH TEXT,
-        FAVORITE INTEGER 
+        FAVORITE INTEGER DEFAULT 2 
       )
     ''';
 
@@ -51,7 +51,6 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
     final db = _database;
 
     final List<Map<String, dynamic>> maps = await db.query("BIBLIOTECA");
-    print(maps);
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));
     return listbookAll;
@@ -104,14 +103,13 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
     int? position =
         listBookDownloaded?.indexWhere((element) => element.id == book.id);
     if (position != null && position >= 0) {
-      if (book.favorite==1) {
+      if (book.favorite == 1) {
         db.delete(
           'BIBLIOTECA',
           where: 'ID = ?',
           whereArgs: [book.id],
         );
         return 0;
-        
       }
       await db.update(
         'BIBLIOTECA',
