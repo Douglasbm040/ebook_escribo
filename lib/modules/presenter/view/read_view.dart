@@ -23,6 +23,7 @@ class _ReadViewState extends State<ReadView> {
 
   initReadEpub(String path) {
     Future.delayed(const Duration(milliseconds: 500));
+    Center(child: ElevatedButton(onPressed: () {}, child: Text("akjsdkfjjklahsd")));
     VocsyEpub.setConfig(
       themeColor: Theme.of(context).primaryColor,
       identifier: book.author,
@@ -163,7 +164,7 @@ class _ReadViewState extends State<ReadView> {
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.deepOrangeAccent[100]),
                             onPressed: () {
-                            Modular.to.pop();
+                              Modular.to.pop();
                             },
                             child: SizedBox(
                               height: 80,

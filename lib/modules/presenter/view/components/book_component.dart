@@ -12,21 +12,28 @@ class BookComponent extends StatefulWidget {
     super.key,
     required this.itembook,
     required this.pages,
-    required this.controller,
   });
   final BookEntity itembook;
   final int pages;
-  final BookController controller;
 
   @override
   State<BookComponent> createState() => _BookComponentState();
 }
 
 class _BookComponentState extends State<BookComponent> {
+  final Controller controller = Modular.get<Controller>();
+  final BookController bookcontroller = Modular.get<BookController>();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("Pages: ${widget.pages}");
+    bookcontroller.iniState(isFavoriteController());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (_) {
-      BookController bookcontroller = widget.controller;
+    return Observer(builder: (context) {
       return Stack(
         children: [
           Card(
@@ -47,7 +54,7 @@ class _BookComponentState extends State<BookComponent> {
                           var snackBar = const SnackBar(
                             content: Text("Baixando ..."),
                             duration:
-                                Duration(seconds: 5), // Duração da e;})xibição
+                                Duration(seconds: 5), // Duração da exibição
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           String texto = await Modular.get<Controller>()
@@ -74,7 +81,7 @@ class _BookComponentState extends State<BookComponent> {
                       child: SizedBox(
                         width: 300,
                         height: 250,
-                        child:  Image(
+                        child: Image(
                             fit: BoxFit.fill,
                             image: CachedNetworkImageProvider(
                               widget.itembook.coverUrl,
@@ -146,9 +153,21 @@ class _BookComponentState extends State<BookComponent> {
                         size: 40,
                       )),
                 ),
-              ))
+              )),
         ],
       );
     });
+  }
+
+  bool isFavoriteController() {
+    bool isfavorite = widget.itembook.favorite == 1 ? true : false;
+    if (widget.pages == 0) {
+      controller.booksFavorite.forEach((element) {
+        if (element.id == widget.itembook.id) {
+          isfavorite = true;
+        }
+      });
+    }
+    return isfavorite;
   }
 }

@@ -41,60 +41,83 @@ abstract class _ControllerBase with Store {
       ObservableList<BookController>();
 
   @action
-  Future<List<BookEntity>?> getAllDownloaded() async {
-    favoriteDownloaded.clear();
-    booksDownloaded.clear();
+  Future<void> getAllDownloaded() async {
+    /*favoriteDownloaded.clear();
+    booksDownloaded.clear();*/
     List<BookEntity>? listBooks = [];
     final response = await usecaseMangeBook.getAllDownloaded();
     response.fold((l) => null, (r) => listBooks = r);
-    for (var e in listBooks!) {
+    for (int i = 0; i < listBooks!.length; i++) {
+      if (i < booksDownloaded.length) {
+        booksDownloaded.removeAt(i);
+      }
+      booksDownloaded.insert(i, listBooks![i]);
+    }
+    /*for (var e in listBooks!) {
       booksDownloaded.add(e);
-      if (e.favorite == 1) {
+      /* if (e.favorite == 1) {
         favoriteDownloaded.add(BookController(favorite: true));
       }
-      favoriteDownloaded.add(BookController(favorite: false));
-    }
+      favoriteDownloaded.add(BookController(favorite: false));*/
+    }*/
   }
 
   @action
-  Future<List<BookEntity>?> getAllFavorite() async {
-    booksFavorite.clear();
-    favoriteBooks.clear();
+  Future<void> getAllFavorite() async {
     List<BookEntity>? listBooks = [];
     final response = await usecaseMangeBook.getAllBooksFavorite();
     response.fold((l) => null, (r) => listBooks = r);
-    for (var e in listBooks!) {
-      booksFavorite.add(e);
-      if (e.favorite == 1) {
+
+    for (int i = 0; i < listBooks!.length; i++) {
+      if (i < booksFavorite.length) {
+        booksFavorite.removeAt(i);
+      }
+      booksFavorite.insert(i, listBooks![i]);
+
+      /* if (e.favorite == 1) {
         favoriteBooks.add(BookController(favorite: true));
       }
-      favoriteBooks.add(BookController(favorite: false));
+      favoriteBooks.add(BookController(favorite: false));*/
     }
+
+    /*for (var e in listBooks!) {
+      /* if (e.favorite == 1) {
+        favoriteBooks.add(BookController(favorite: true));
+      }
+      favoriteBooks.add(BookController(favorite: false));*/
+    }*/
   }
 
   @action
-  Future<List<BookEntity>?> getAllRequested() async {
-    booksRequested.clear();
-    favoriteRequested.clear();
+  Future<void> getAllRequested() async {
+    //getAllFavorite();
+    /* booksRequested.clear();
+    favoriteRequested.clear();*/
     List<BookEntity>? _booksRequested = [];
     final response = await usecaseResquestBook.getBooks("/books.json");
     response.fold((l) => null, (r) => _booksRequested = r);
     List<BookEntity>? listBooks = [];
-    final responses = await usecaseMangeBook.getAllBooksFavorite();
-    responses.fold((l) => null, (r) => listBooks = r);
+    //final responses = await usecaseMangeBook.getAllBooksFavorite();
+    //responses.fold((l) => null, (r) => listBooks = r);
+    for (int i = 0; i < _booksRequested!.length; i++) {
+      if (i < booksRequested.length) {
+        booksRequested.removeAt(i);
+      }
+      booksRequested.insert(i, _booksRequested![i]);
+    }
 
-    for (var e in _booksRequested ?? []) {
+    /* for (var e in _booksRequested ?? []) {
       booksRequested.add(e);
-      for (var i in listBooks ?? []) {
+      /*for (var i in listBooks ?? []) {
         if (i.id == e.id) {
           favoriteRequested.add(BookController(favorite: true));
           continue;
         }
-      }
-    }
+      }*/
+    }*/ /*
 for (var i = 0; i < _booksRequested!.length - listBooks!.length; i++) {
   favoriteRequested.add(BookController(favorite: false));
-}
+}*/
   }
 
   @action
@@ -108,11 +131,11 @@ for (var i = 0; i < _booksRequested!.length - listBooks!.length; i++) {
       response.fold((l) => null, (r) => transation = r);
       switch (transation) {
         case 1:
-          initStateList();
+          await initStateList();
           return "você já possue este livro";
 
         case 2:
-          initStateList();
+          await initStateList();
 
           return "O livro foi adicionado a sua lista de downloads";
         default:
@@ -134,9 +157,7 @@ for (var i = 0; i < _booksRequested!.length - listBooks!.length; i++) {
     selectedIndex = index;
     switch (index) {
       case 0:
-        if (booksRequested.isEmpty) {
-          await getAllRequested();
-        }
+        await getAllRequested();
         break;
       case 1:
         await getAllDownloaded();

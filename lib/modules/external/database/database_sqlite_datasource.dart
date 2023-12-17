@@ -49,8 +49,11 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   @override
   Future<List<BookEntity>?> getAllDownloaded() async {
     final db = _database;
-
-    final List<Map<String, dynamic>> maps = await db.query("BIBLIOTECA");
+    final List<Map<String, dynamic>> maps = await db.query(
+      "BIBLIOTECA",
+      where: "PATH IS NOT NULL",
+    );
+    print(maps);
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));
     return listbookAll;
@@ -97,20 +100,11 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   Future<int> favoriteToggle(Book book) async {
     int resultOperation = -1;
     final db = _database;
-    db.delete("BIBLIOTECA");
+    final getALLBooks = await db.query('BIBLIOTECA');
 
-    final listBookDownloaded = await getAllDownloaded();
-    int? position =
-        listBookDownloaded?.indexWhere((element) => element.id == book.id);
+    int position =
+        getALLBooks.indexWhere((element) => element["ID"] == book.id);
     if (position != null && position >= 0) {
-      if (book.favorite == 1) {
-        db.delete(
-          'BIBLIOTECA',
-          where: 'ID = ?',
-          whereArgs: [book.id],
-        );
-        return 0;
-      }
       await db.update(
         'BIBLIOTECA',
         {'FAVORITE': book.favorite},
@@ -132,18 +126,10 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
                   favorite: book.favorite)
               .toJsonDAO(),
           conflictAlgorithm: ConflictAlgorithm.replace);
-      resultOperation = 2;
+
       return resultOperation;
     }
     return -1;
-    /* final db = _database;
-    await db.update(
-      'BIBLIOTECA',
-      {'FAVORITE': book.favorite},
-      where: 'ID = ?',
-      whereArgs: [book.id],
-    );
-    return 1;*/
   }
 
   @override
@@ -153,6 +139,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
       "BIBLIOTECA",
       where: "FAVORITE = 1",
     );
+
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));
     return listbookAll;

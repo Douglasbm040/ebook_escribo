@@ -15,27 +15,19 @@ abstract class _BookControllerBase with Store {
   IManageBooksUseCase usecaseMangeBook = Modular.get<IManageBooksUseCase>();
   Controller controller = Modular.get<Controller>();
   @observable
-  bool favorite;
+  bool favorite = false;
 
- 
-  _BookControllerBase({
-    required this.favorite,
- 
-  });
+  @action
+  void iniState(bool favorite) {
+    this.favorite = favorite;
+  }
 
   @action
   _BookControllerBase? atualizar(int favorite) {
     this.favorite = favorite == 2 ? false : true;
   }
 
-  @action
-  setState(int? favorite) {
-    if (favorite == null) {
-      this.favorite = false;
-    } else {
-      this.favorite = favorite == 2 ? true : false;
-    }
-  }
+ 
 
   @action
   isToggleFavorite() {

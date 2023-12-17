@@ -125,7 +125,7 @@ mixin _$Controller on _ControllerBase, Store {
       AsyncAction('_ControllerBase.getAllDownloaded', context: context);
 
   @override
-  Future<List<BookEntity>?> getAllDownloaded() {
+  Future<void> getAllDownloaded() {
     return _$getAllDownloadedAsyncAction.run(() => super.getAllDownloaded());
   }
 
@@ -133,7 +133,7 @@ mixin _$Controller on _ControllerBase, Store {
       AsyncAction('_ControllerBase.getAllFavorite', context: context);
 
   @override
-  Future<List<BookEntity>?> getAllFavorite() {
+  Future<void> getAllFavorite() {
     return _$getAllFavoriteAsyncAction.run(() => super.getAllFavorite());
   }
 
@@ -141,7 +141,7 @@ mixin _$Controller on _ControllerBase, Store {
       AsyncAction('_ControllerBase.getAllRequested', context: context);
 
   @override
-  Future<List<BookEntity>?> getAllRequested() {
+  Future<void> getAllRequested() {
     return _$getAllRequestedAsyncAction.run(() => super.getAllRequested());
   }
 

@@ -37,7 +37,7 @@ class _GridViewComponentState extends State<GridViewComponent> {
           return  BookComponent(
                   itembook: widget.listEntity[index],
                   pages: widget.pages,
-                  controller: widget.listBook[index],
+                 
                 );
         },
       ),

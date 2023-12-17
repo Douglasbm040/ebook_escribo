@@ -29,22 +29,22 @@ mixin _$BookController on _BookControllerBase, Store {
       ActionController(name: '_BookControllerBase', context: context);
 
   @override
-  _BookControllerBase? atualizar(int favorite) {
+  void iniState(bool favorite) {
     final _$actionInfo = _$_BookControllerBaseActionController.startAction(
-        name: '_BookControllerBase.atualizar');
+        name: '_BookControllerBase.iniState');
     try {
-      return super.atualizar(favorite);
+      return super.iniState(favorite);
     } finally {
       _$_BookControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic setState(int? favorite) {
+  _BookControllerBase? atualizar(int favorite) {
     final _$actionInfo = _$_BookControllerBaseActionController.startAction(
-        name: '_BookControllerBase.setState');
+        name: '_BookControllerBase.atualizar');
     try {
-      return super.setState(favorite);
+      return super.atualizar(favorite);
     } finally {
       _$_BookControllerBaseActionController.endAction(_$actionInfo);
     }
