@@ -6,6 +6,7 @@ import 'package:ebook_escribo/modules/presenter/controller/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 
 class BookComponent extends StatefulWidget {
   const BookComponent({
@@ -23,16 +24,22 @@ class BookComponent extends StatefulWidget {
 class _BookComponentState extends State<BookComponent> {
   final Controller controller = Modular.get<Controller>();
   final BookController bookcontroller = Modular.get<BookController>();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print("Pages: ${widget.pages}");
-    bookcontroller.iniState(isFavoriteController());
-  }
 
+ 
   @override
   Widget build(BuildContext context) {
+       bool isfavorite = widget.itembook.favorite == 1 ? true : false;
+      
+      if (widget.pages == 0) {
+        print("${controller.booksFavorite.length} ajsk");
+        controller.booksFavorite.forEach((element) {
+          print(element.id);
+          if (element.id == widget.itembook.id) {
+            isfavorite = true;
+          }
+        });
+      }
+      bookcontroller.iniState(isfavorite);
     return Observer(builder: (context) {
       return Stack(
         children: [
@@ -50,7 +57,7 @@ class _BookComponentState extends State<BookComponent> {
                     borderRadius: BorderRadius.circular(10.0),
                     child: InkWell(
                       onTap: () async {
-                        if (widget.pages == 0) {
+                        if (widget.pages == 0 || widget.pages == 2) {
                           var snackBar = const SnackBar(
                             content: Text("Baixando ..."),
                             duration:
@@ -134,8 +141,7 @@ class _BookComponentState extends State<BookComponent> {
                         : "Livro desfavoritado"),
                     duration: const Duration(seconds: 1),
                   );
-
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  
                 },
                 child: CircleAvatar(
                   radius: 25,
@@ -157,17 +163,5 @@ class _BookComponentState extends State<BookComponent> {
         ],
       );
     });
-  }
-
-  bool isFavoriteController() {
-    bool isfavorite = widget.itembook.favorite == 1 ? true : false;
-    if (widget.pages == 0) {
-      controller.booksFavorite.forEach((element) {
-        if (element.id == widget.itembook.id) {
-          isfavorite = true;
-        }
-      });
-    }
-    return isfavorite;
   }
 }

@@ -49,10 +49,12 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   @override
   Future<List<BookEntity>?> getAllDownloaded() async {
     final db = _database;
+
     final List<Map<String, dynamic>> maps = await db.query(
       "BIBLIOTECA",
       where: "PATH IS NOT NULL",
     );
+    print("getAllDownloaded: ");
     print(maps);
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));
@@ -104,7 +106,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
 
     int position =
         getALLBooks.indexWhere((element) => element["ID"] == book.id);
-    if (position != null && position >= 0) {
+    if (position >= 0) {
       await db.update(
         'BIBLIOTECA',
         {'FAVORITE': book.favorite},
@@ -114,7 +116,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
       resultOperation = 1;
       return resultOperation;
     }
-    if (position! < 0) {
+    if (position < 0) {
       await db.insert(
           'BIBLIOTECA',
           Book(
@@ -139,6 +141,8 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
       "BIBLIOTECA",
       where: "FAVORITE = 1",
     );
+    print("getAllBooksFavorite: ");
+    print(maps);
 
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));

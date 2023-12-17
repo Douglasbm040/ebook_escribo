@@ -12,11 +12,10 @@ import 'package:mobx/mobx.dart';
 class libraryComponent extends StatefulWidget {
   const libraryComponent({
     super.key,
-    required this.controller,
     required this.page,
     required this.controllerBook,
   });
-  final ObservableList<BookController> controller;
+
   final ObservableList<BookEntity> controllerBook;
   final int page;
 
@@ -59,7 +58,7 @@ class _libraryComponentState extends State<libraryComponent> {
                   ),
                   GridViewComponent(
                       listEntity: widget.controllerBook,
-                      listBook: widget.controller,
+                    
                       pages: widget.page),
                 ],
               );

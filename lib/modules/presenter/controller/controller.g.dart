@@ -73,54 +73,6 @@ mixin _$Controller on _ControllerBase, Store {
     });
   }
 
-  late final _$favoriteRequestedAtom =
-      Atom(name: '_ControllerBase.favoriteRequested', context: context);
-
-  @override
-  ObservableList<BookController> get favoriteRequested {
-    _$favoriteRequestedAtom.reportRead();
-    return super.favoriteRequested;
-  }
-
-  @override
-  set favoriteRequested(ObservableList<BookController> value) {
-    _$favoriteRequestedAtom.reportWrite(value, super.favoriteRequested, () {
-      super.favoriteRequested = value;
-    });
-  }
-
-  late final _$favoriteDownloadedAtom =
-      Atom(name: '_ControllerBase.favoriteDownloaded', context: context);
-
-  @override
-  ObservableList<BookController> get favoriteDownloaded {
-    _$favoriteDownloadedAtom.reportRead();
-    return super.favoriteDownloaded;
-  }
-
-  @override
-  set favoriteDownloaded(ObservableList<BookController> value) {
-    _$favoriteDownloadedAtom.reportWrite(value, super.favoriteDownloaded, () {
-      super.favoriteDownloaded = value;
-    });
-  }
-
-  late final _$favoriteBooksAtom =
-      Atom(name: '_ControllerBase.favoriteBooks', context: context);
-
-  @override
-  ObservableList<BookController> get favoriteBooks {
-    _$favoriteBooksAtom.reportRead();
-    return super.favoriteBooks;
-  }
-
-  @override
-  set favoriteBooks(ObservableList<BookController> value) {
-    _$favoriteBooksAtom.reportWrite(value, super.favoriteBooks, () {
-      super.favoriteBooks = value;
-    });
-  }
-
   late final _$getAllDownloadedAsyncAction =
       AsyncAction('_ControllerBase.getAllDownloaded', context: context);
 
@@ -157,7 +109,7 @@ mixin _$Controller on _ControllerBase, Store {
       AsyncAction('_ControllerBase.initStateList', context: context);
 
   @override
-  Future<void> initStateList() {
+  Future<dynamic> initStateList() {
     return _$initStateListAsyncAction.run(() => super.initStateList());
   }
 
@@ -184,10 +136,7 @@ mixin _$Controller on _ControllerBase, Store {
 selectedIndex: ${selectedIndex},
 booksRequested: ${booksRequested},
 booksDownloaded: ${booksDownloaded},
-booksFavorite: ${booksFavorite},
-favoriteRequested: ${favoriteRequested},
-favoriteDownloaded: ${favoriteDownloaded},
-favoriteBooks: ${favoriteBooks}
+booksFavorite: ${booksFavorite}
     ''';
   }
 }

@@ -27,19 +27,6 @@ abstract class _ControllerBase with Store {
   List<ObservableList<BookEntity>> listObserver() =>
       [booksRequested, booksDownloaded, booksFavorite];
 
-  List<ObservableList<BookController>> listfavoriteObserver() =>
-      [favoriteRequested, favoriteDownloaded, favoriteBooks];
-
-  @observable
-  ObservableList<BookController> favoriteRequested =
-      ObservableList<BookController>();
-  @observable
-  ObservableList<BookController> favoriteDownloaded =
-      ObservableList<BookController>();
-  @observable
-  ObservableList<BookController> favoriteBooks =
-      ObservableList<BookController>();
-
   @action
   Future<void> getAllDownloaded() async {
     /*favoriteDownloaded.clear();
@@ -65,14 +52,15 @@ abstract class _ControllerBase with Store {
   @action
   Future<void> getAllFavorite() async {
     List<BookEntity>? listBooks = [];
+    booksFavorite.clear();
     final response = await usecaseMangeBook.getAllBooksFavorite();
     response.fold((l) => null, (r) => listBooks = r);
 
     for (int i = 0; i < listBooks!.length; i++) {
-      if (i < booksFavorite.length) {
+      /*if (i < booksFavorite.length) {
         booksFavorite.removeAt(i);
-      }
-      booksFavorite.insert(i, listBooks![i]);
+      }*/
+      booksFavorite.add(listBooks![i]);
 
       /* if (e.favorite == 1) {
         favoriteBooks.add(BookController(favorite: true));
@@ -146,10 +134,10 @@ for (var i = 0; i < _booksRequested!.length - listBooks!.length; i++) {
   }
 
   @action
-  Future<void> initStateList() async {
-    await getAllDownloaded();
-    await getAllFavorite();
-    await getAllRequested();
+  Future initStateList() async {
+    await Future.wait<void>(
+        [getAllDownloaded(), getAllFavorite(), getAllRequested()]);
+    print("atualizada");
   }
 
   @action

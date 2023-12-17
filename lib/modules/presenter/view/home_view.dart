@@ -35,8 +35,7 @@ class _HomeViewState extends State<HomeView> {
               page: controller.selectedIndex,
               controllerBook:
                   controller.listObserver()[controller.selectedIndex],
-              controller:
-                  controller.listfavoriteObserver()[controller.selectedIndex],
+              
             ),
           );
         }),

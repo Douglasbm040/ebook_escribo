@@ -9,12 +9,11 @@ import 'package:mobx/mobx.dart';
 class GridViewComponent extends StatefulWidget {
   const GridViewComponent({
     super.key,
-    required this.listBook,
     required this.pages,
     required this.listEntity,
   });
   final int pages;
-  final ObservableList<BookController> listBook;
+
   final ObservableList<BookEntity> listEntity;
 
   @override
@@ -34,11 +33,10 @@ class _GridViewComponentState extends State<GridViewComponent> {
             childAspectRatio: .6),
         itemCount: widget.listEntity.length,
         itemBuilder: (BuildContext context, int index) {
-          return  BookComponent(
-                  itembook: widget.listEntity[index],
-                  pages: widget.pages,
-                 
-                );
+          return BookComponent(
+            itembook: widget.listEntity[index],
+            pages: widget.pages,
+          );
         },
       ),
     );
