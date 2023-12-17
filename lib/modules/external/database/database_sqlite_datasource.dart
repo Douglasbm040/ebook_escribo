@@ -49,7 +49,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   @override
   Future<List<BookEntity>?> getAllDownloaded() async {
     final db = _database;
-
+    
     final List<Map<String, dynamic>> maps = await db.query(
       "BIBLIOTECA",
       where: "PATH IS NOT NULL",
@@ -64,10 +64,11 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
     int resultOperation = -1;
     final db = _database;
 
-    final listBookDownloaded = await getAllDownloaded();
-    int? position =
-        listBookDownloaded?.indexWhere((element) => element.id == book.id);
-    if (position != null && position >= 0 && path.isNotEmpty) {
+    final getALLBooks = await db.query('BIBLIOTECA');
+
+    int position =
+        getALLBooks.indexWhere((element) => element["ID"] == book.id);
+    if (position >= 0 && path.isNotEmpty) {
       await db.update(
         'BIBLIOTECA',
         {'PATH': path},
@@ -77,7 +78,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
       resultOperation = 1;
       return resultOperation;
     }
-    if (position! < 0) {
+    if (position < 0) {
       await db.insert(
           'BIBLIOTECA',
           Book(
