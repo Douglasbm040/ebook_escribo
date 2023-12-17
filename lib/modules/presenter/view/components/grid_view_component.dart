@@ -33,10 +33,12 @@ class _GridViewComponentState extends State<GridViewComponent> {
             childAspectRatio: .6),
         itemCount: widget.listEntity.length,
         itemBuilder: (BuildContext context, int index) {
-          return BookComponent(
-            itembook: widget.listEntity[index],
-            pages: widget.pages,
-          );
+          return Observer(builder: (_) {
+            return BookComponent(
+              itembook: widget.listEntity[index],
+              pages: widget.pages,
+            );
+          });
         },
       ),
     );

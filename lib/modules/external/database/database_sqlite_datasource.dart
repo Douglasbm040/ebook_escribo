@@ -54,8 +54,6 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
       "BIBLIOTECA",
       where: "PATH IS NOT NULL",
     );
-    print("getAllDownloaded: ");
-    print(maps);
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));
     return listbookAll;
@@ -141,8 +139,6 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
       "BIBLIOTECA",
       where: "FAVORITE = 1",
     );
-    print("getAllBooksFavorite: ");
-    print(maps);
 
     final listbookAll =
         List.generate(maps.length, (index) => Book.fromJsonDAO(maps[index]));

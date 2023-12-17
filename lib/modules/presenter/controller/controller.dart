@@ -172,4 +172,11 @@ for (var i = 0; i < _booksRequested!.length - listBooks!.length; i++) {
     controller.isToggleFavorite();
     await initStateList();
   }
+
+  Future<List<BookEntity>?> fazconsular() async {
+    List<BookEntity>? listBooks = [];
+    booksFavorite.clear();
+    final response = await usecaseMangeBook.getAllBooksFavorite();
+    return response.fold((l) => null, (r) => listBooks = r);
+  }
 }

@@ -25,21 +25,22 @@ class _BookComponentState extends State<BookComponent> {
   final Controller controller = Modular.get<Controller>();
   final BookController bookcontroller = Modular.get<BookController>();
 
- 
   @override
   Widget build(BuildContext context) {
-       bool isfavorite = widget.itembook.favorite == 1 ? true : false;
-      
-      if (widget.pages == 0) {
-        print("${controller.booksFavorite.length} ajsk");
-        controller.booksFavorite.forEach((element) {
-          print(element.id);
+    bool isfavorite = widget.itembook.favorite == 1 ? true : false;
+    if (widget.pages == 0) {
+      List<BookEntity> booksFavorite = [];
+      Modular.get<Controller>().fazconsular().then((value) {
+        booksFavorite = value ?? [];
+        booksFavorite.forEach((element) {
           if (element.id == widget.itembook.id) {
             isfavorite = true;
           }
+          bookcontroller.iniState(isfavorite);
         });
-      }
-      bookcontroller.iniState(isfavorite);
+      });
+    }
+    bookcontroller.iniState(isfavorite);
     return Observer(builder: (context) {
       return Stack(
         children: [
@@ -141,7 +142,6 @@ class _BookComponentState extends State<BookComponent> {
                         : "Livro desfavoritado"),
                     duration: const Duration(seconds: 1),
                   );
-                  
                 },
                 child: CircleAvatar(
                   radius: 25,
