@@ -1,12 +1,11 @@
-import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
-import 'package:ebook_escribo/modules/presenter/controller/controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'package:ebook_escribo/modules/presenter/controller/controller.dart';
+
 import 'pages/library_component.dart';
+
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -20,7 +19,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     controller.initStateList();
   }
@@ -31,7 +29,7 @@ class _HomeViewState extends State<HomeView> {
         backgroundColor: const Color(0xffDCDCDC),
         body: Observer(builder: (_) {
           return SafeArea(
-            child: libraryComponent(
+            child: LibraryComponent(
               page: controller.selectedIndex,
               controllerBook:
                   controller.listObserver()[controller.selectedIndex],

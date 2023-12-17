@@ -40,17 +40,6 @@ mixin _$BookController on _BookControllerBase, Store {
   }
 
   @override
-  _BookControllerBase? atualizar(int favorite) {
-    final _$actionInfo = _$_BookControllerBaseActionController.startAction(
-        name: '_BookControllerBase.atualizar');
-    try {
-      return super.atualizar(favorite);
-    } finally {
-      _$_BookControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic isToggleFavorite() {
     final _$actionInfo = _$_BookControllerBaseActionController.startAction(
         name: '_BookControllerBase.isToggleFavorite');

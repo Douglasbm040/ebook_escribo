@@ -42,7 +42,7 @@ class AnimationIsEmpty extends StatelessWidget {
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text('Sem registros',
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontFamily: "Afacad",
                               fontSize: 20,
                               color: Colors.black,

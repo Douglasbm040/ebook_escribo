@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../../domain/entity/book_entity.dart';
@@ -33,6 +33,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
     return _instance!;
   }
 
+  // ignore: non_constant_identifier_names
   static String get BIBLIOTECA => '''
 
       CREATE TABLE BIBLIOTECA (
@@ -49,7 +50,7 @@ class DatabaseSqliteDatasource implements IManagerBookDatasource {
   @override
   Future<List<BookEntity>?> getAllDownloaded() async {
     final db = _database;
-    
+   
     final List<Map<String, dynamic>> maps = await db.query(
       "BIBLIOTECA",
       where: "PATH IS NOT NULL",

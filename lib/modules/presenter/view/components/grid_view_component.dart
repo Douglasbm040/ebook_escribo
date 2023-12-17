@@ -1,10 +1,9 @@
-import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
-import 'package:ebook_escribo/modules/presenter/controller/bookcontroller.dart';
-import 'package:ebook_escribo/modules/presenter/view/components/animation_book_loading.dart';
-import 'package:ebook_escribo/modules/presenter/view/components/book_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+
+import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
+import 'package:ebook_escribo/modules/presenter/view/components/book_component.dart';
 
 class GridViewComponent extends StatefulWidget {
   const GridViewComponent({

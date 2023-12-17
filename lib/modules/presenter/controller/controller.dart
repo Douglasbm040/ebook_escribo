@@ -9,6 +9,7 @@ import '../../domain/usecases/manager_books_usecase.dart';
 import 'package:mobx/mobx.dart';
 part 'controller.g.dart';
 
+// ignore: library_private_types_in_public_api
 class Controller = _ControllerBase with _$Controller;
 
 abstract class _ControllerBase with Store {
@@ -29,8 +30,6 @@ abstract class _ControllerBase with Store {
 
   @action
   Future<void> getAllDownloaded() async {
-    /*favoriteDownloaded.clear();
-    booksDownloaded.clear();*/
     List<BookEntity>? listBooks = [];
     final response = await usecaseMangeBook.getAllDownloaded();
     response.fold((l) => null, (r) => listBooks = r);
@@ -40,13 +39,6 @@ abstract class _ControllerBase with Store {
       }
       booksDownloaded.insert(i, listBooks![i]);
     }
-    /*for (var e in listBooks!) {
-      booksDownloaded.add(e);
-      /* if (e.favorite == 1) {
-        favoriteDownloaded.add(BookController(favorite: true));
-      }
-      favoriteDownloaded.add(BookController(favorite: false));*/
-    }*/
   }
 
   @action
@@ -57,63 +49,30 @@ abstract class _ControllerBase with Store {
     response.fold((l) => null, (r) => listBooks = r);
 
     for (int i = 0; i < listBooks!.length; i++) {
-      /*if (i < booksFavorite.length) {
-        booksFavorite.removeAt(i);
-      }*/
       booksFavorite.add(listBooks![i]);
-
-      /* if (e.favorite == 1) {
-        favoriteBooks.add(BookController(favorite: true));
-      }
-      favoriteBooks.add(BookController(favorite: false));*/
     }
-
-    /*for (var e in listBooks!) {
-      /* if (e.favorite == 1) {
-        favoriteBooks.add(BookController(favorite: true));
-      }
-      favoriteBooks.add(BookController(favorite: false));*/
-    }*/
   }
 
   @action
   Future<void> getAllRequested() async {
-    //getAllFavorite();
-    /* booksRequested.clear();
-    favoriteRequested.clear();*/
-    List<BookEntity>? _booksRequested = [];
+    List<BookEntity>? cachebooksRequested = [];
     final response = await usecaseResquestBook.getBooks("/books.json");
-    response.fold((l) => null, (r) => _booksRequested = r);
-    List<BookEntity>? listBooks = [];
-    //final responses = await usecaseMangeBook.getAllBooksFavorite();
-    //responses.fold((l) => null, (r) => listBooks = r);
-    for (int i = 0; i < _booksRequested!.length; i++) {
+    response.fold((l) => null, (r) => cachebooksRequested = r);
+
+    for (int i = 0; i < cachebooksRequested!.length; i++) {
       if (i < booksRequested.length) {
         booksRequested.removeAt(i);
       }
-      booksRequested.insert(i, _booksRequested![i]);
+      booksRequested.insert(i, cachebooksRequested![i]);
     }
-
-    /* for (var e in _booksRequested ?? []) {
-      booksRequested.add(e);
-      /*for (var i in listBooks ?? []) {
-        if (i.id == e.id) {
-          favoriteRequested.add(BookController(favorite: true));
-          continue;
-        }
-      }*/
-    }*/ /*
-for (var i = 0; i < _booksRequested!.length - listBooks!.length; i++) {
-  favoriteRequested.add(BookController(favorite: false));
-}*/
   }
 
   @action
   Future<String> downloadBook(BookEntity book) async {
     String? path;
     final response = await usecaseResquestBook.downloadBook(book.downloadUrl);
-    response.fold((l) => null, (r) => path = r );
-    if (path != null ) {
+    response.fold((l) => null, (r) => path = r);
+    if (path != null) {
       int? transation;
       final response = await usecaseMangeBook.downloadBook(book, path!);
       response.fold((l) => null, (r) => transation = r);
@@ -174,9 +133,7 @@ for (var i = 0; i < _booksRequested!.length - listBooks!.length; i++) {
   }
 
   Future<List<BookEntity>?> fazconsular() async {
-    List<BookEntity>? listBooks = [];
-    booksFavorite.clear();
     final response = await usecaseMangeBook.getAllBooksFavorite();
-    return response.fold((l) => null, (r) => listBooks = r);
+    return response.fold((l) => null, (r) => r);
   }
 }

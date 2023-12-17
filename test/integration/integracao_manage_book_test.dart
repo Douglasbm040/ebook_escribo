@@ -1,13 +1,11 @@
-import 'package:ebook_escribo/modules/app_module.dart';
-import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
-import 'package:ebook_escribo/modules/domain/usecases/manager_books_usecase.dart';
-import 'package:ebook_escribo/modules/external/database/database_sqlite_datasource.dart';
-import 'package:ebook_escribo/modules/infra/datasources/imanager_book_datasource.dart';
-import 'package:ebook_escribo/modules/infra/model/book.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sqflite/sqlite_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+import 'package:ebook_escribo/modules/app_module.dart';
+import 'package:ebook_escribo/modules/domain/usecases/manager_books_usecase.dart';
+import 'package:ebook_escribo/modules/external/database/database_sqlite_datasource.dart';
+import 'package:ebook_escribo/modules/infra/model/book.dart';
 
 void main() async {
   sqfliteFfiInit();
@@ -17,8 +15,7 @@ void main() async {
   Database database =
       await databaseFactoryFfi.openDatabase(inMemoryDatabasePath);
   database.execute(DatabaseSqliteDatasource.BIBLIOTECA);
-  /*DatabaseSqliteDatasource database =
-      await DatabaseSqliteDatasource.getInstance();*/
+
   setUp(() async {
     Modular.bindModule(AppModule(() => DatabaseSqliteDatasource(database)));
     usecase = Modular.get<IManageBooksUseCase>();
@@ -37,7 +34,7 @@ void main() async {
     expect(teste.isRight(), true);
   });
   test('Deve inserir um livro', () async {
-    var teste = await usecase.downloadBook(paramm,"");
+    var teste = await usecase.downloadBook(paramm, "");
     expect(teste.isRight(), true);
   });
   test('Deve retornar uma lista de livros favoritos', () async {

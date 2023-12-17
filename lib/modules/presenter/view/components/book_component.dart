@@ -1,12 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
-import 'package:ebook_escribo/modules/infra/model/book.dart';
-import 'package:ebook_escribo/modules/presenter/controller/bookcontroller.dart';
-import 'package:ebook_escribo/modules/presenter/controller/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:mobx/mobx.dart';
+
+import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
+import 'package:ebook_escribo/modules/presenter/controller/bookcontroller.dart';
+import 'package:ebook_escribo/modules/presenter/controller/controller.dart';
 
 class BookComponent extends StatefulWidget {
   const BookComponent({
@@ -44,12 +43,12 @@ class _BookComponentState extends State<BookComponent> {
       List<BookEntity> booksFavorite = [];
       Modular.get<Controller>().fazconsular().then((value) {
         booksFavorite = value ?? [];
-        booksFavorite.forEach((element) {
+        for (var element in booksFavorite) {
           if (element.id == widget.itembook.id) {
             isfavorite = true;
           }
           bookcontroller.iniState(isfavorite);
-        });
+        }
       });
     }
     bookcontroller.iniState(isfavorite);
@@ -66,42 +65,14 @@ class _BookComponentState extends State<BookComponent> {
               children: [
                 Semantics(
                   label:
-                      "Livro ${widget.itembook.title} do ${widget.itembook.author}  ${widget.itembook.favorite == 1 ? "marcado como favorito" : "não marcado como favorito"} clique para baixar ",
+                      "Livro ${widget.itembook.title} do ${widget.itembook.author}  ${widget.itembook.favorite == 1 ? "marcado como favorito" : "não marcado como favorito"} clique para baixar para favoritar",
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: InkWell(
                         onTap: () async {
-                          if (widget.pages == 0 || widget.pages == 2) {
-                            var snackBar = const SnackBar(
-                              content: Text("Baixando ..."),
-                              duration:
-                                  Duration(seconds: 2), // Duração da exibição
-                            );
-                            Semantics(label: "baixando");
-                            _scaffoldMessenger?.showSnackBar(snackBar);
-                            String texto = await Modular.get<Controller>()
-                                .downloadBook(widget.itembook);
-                            snackBar = SnackBar(
-                              content: Text(texto),
-                              duration: const Duration(
-                                  seconds: 3), // Duração da exibição
-                            );
-                            Semantics(label: texto);
-                            _scaffoldMessenger?.showSnackBar(snackBar);
-                          } else {
-                            if (widget.itembook.path != null) {
-                              Modular.to.pushNamed("/read",
-                                  arguments: widget.itembook);
-                            }
-                            int x = 0;
-                            while (widget.itembook.path != null || x == 4) {
-                              String texto = await Modular.get<Controller>()
-                                  .downloadBook(widget.itembook);
-                              x++;
-                            }
-                          }
+                          await onTapBook();
                         },
                         child: SizedBox(
                           width: 300,
@@ -153,14 +124,7 @@ class _BookComponentState extends State<BookComponent> {
               right: -1,
               child: InkWell(
                 onTap: () async {
-                  await Modular.get<Controller>()
-                      .isToggleFavorite(widget.itembook, bookcontroller);
-                  final snackBar = SnackBar(
-                    content: Text(bookcontroller.favorite
-                        ? "Livro favoritado"
-                        : "Livro desfavoritado"),
-                    duration: const Duration(seconds: 1),
-                  );
+                  await onFavoriteToglle();
                 },
                 child: CircleAvatar(
                   radius: 25,
@@ -182,5 +146,43 @@ class _BookComponentState extends State<BookComponent> {
         ],
       );
     });
+  }
+
+  Future<void> onFavoriteToglle() async {
+    await Modular.get<Controller>()
+        .isToggleFavorite(widget.itembook, bookcontroller);
+                     var snackBar = SnackBar(
+      content: Text(bookcontroller.favorite
+          ? "Livro favoritado"
+          : "Livro desfavoritado"),
+      duration: const Duration(seconds: 1),
+    );
+      _scaffoldMessenger?.showSnackBar(snackBar);
+  }
+
+  Future<void> onTapBook() async {
+               if (widget.pages == 0 || widget.pages == 2) {
+      var snackBar = const SnackBar(
+        content: Text("Baixando ..."),
+        duration:
+            Duration(seconds: 2), // Duração da exibição
+      );
+      Semantics(label: "baixando");
+      _scaffoldMessenger?.showSnackBar(snackBar);
+      String texto = await Modular.get<Controller>()
+          .downloadBook(widget.itembook);
+      snackBar = SnackBar(
+        content: Text(texto),
+        duration: const Duration(
+            seconds: 3), // Duração da exibição
+      );
+      Semantics(label: texto);
+      _scaffoldMessenger?.showSnackBar(snackBar);
+    } else {
+      if (widget.itembook.path != null) {
+        Modular.to.pushNamed("/read",
+            arguments: widget.itembook);
+      }
+    }
   }
 }

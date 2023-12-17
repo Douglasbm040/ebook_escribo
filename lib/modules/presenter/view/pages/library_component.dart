@@ -1,16 +1,15 @@
-import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
-import 'package:ebook_escribo/modules/presenter/controller/bookcontroller.dart';
-import 'package:ebook_escribo/modules/presenter/view/components/animation_is_empty.dart';
-import 'package:ebook_escribo/modules/presenter/view/components/animation_sub_title.dart';
-import 'package:ebook_escribo/modules/presenter/view/components/grid_view_component.dart';
-import 'package:ebook_escribo/modules/presenter/view/components/home_view.dart';
-import 'package:ebook_escribo/modules/presenter/view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 
-class libraryComponent extends StatefulWidget {
-  const libraryComponent({
+import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
+import 'package:ebook_escribo/modules/presenter/view/components/animation_is_empty.dart';
+import 'package:ebook_escribo/modules/presenter/view/components/animation_sub_title.dart';
+import 'package:ebook_escribo/modules/presenter/view/components/grid_view_component.dart';
+import 'package:ebook_escribo/modules/presenter/view/components/home_view.dart';
+
+class LibraryComponent extends StatefulWidget {
+  const LibraryComponent({
     super.key,
     required this.page,
     required this.controllerBook,
@@ -20,10 +19,10 @@ class libraryComponent extends StatefulWidget {
   final int page;
 
   @override
-  State<libraryComponent> createState() => _libraryComponentState();
+  State<LibraryComponent> createState() => _LibraryComponentState();
 }
 
-class _libraryComponentState extends State<libraryComponent> {
+class _LibraryComponentState extends State<LibraryComponent> {
   bool isanimatedTitle = false;
   bool isfavorite = false;
 

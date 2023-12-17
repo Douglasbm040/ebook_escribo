@@ -26,12 +26,7 @@ class AnimationSubTitle extends StatelessWidget {
             AnimatedTextKit(
               repeatForever: false,
               isRepeatingAnimation: false,
-              onFinished: () {
-                /*setState(() {
-                  isanimatedTitle =
-                      !isanimatedTitle;
-                });*/
-              },
+              
               animatedTexts: [
                 RotateAnimatedText("Leia +",
                     textStyle: const TextStyle(

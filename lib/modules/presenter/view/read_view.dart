@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
-import 'package:ebook_escribo/modules/presenter/view/components/animation_book_loading.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vocsy_epub_viewer/epub_viewer.dart';
+
+import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
 
 class ReadView extends StatefulWidget {
   const ReadView({super.key});
@@ -23,7 +22,7 @@ class _ReadViewState extends State<ReadView> {
 
   initReadEpub(String path) {
     Future.delayed(const Duration(milliseconds: 500));
-    Center(child: ElevatedButton(onPressed: () {}, child: Text("akjsdkfjjklahsd")));
+    
     VocsyEpub.setConfig(
       themeColor: Theme.of(context).primaryColor,
       identifier: book.author,
@@ -35,7 +34,7 @@ class _ReadViewState extends State<ReadView> {
 
     // get current locator
     VocsyEpub.locatorStream.listen((locator) {
-      print('LOCATOR: $locator');
+    
     });
 
     VocsyEpub.open(
@@ -47,7 +46,7 @@ class _ReadViewState extends State<ReadView> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    //initReadEpub(book.path!);
+   
     return Scaffold(
         body: SafeArea(
             child: Column(

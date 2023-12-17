@@ -1,7 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
-import 'package:ebook_escribo/modules/domain/errors/errors.dart';
-import 'package:ebook_escribo/modules/domain/repositories/request_book_repository.dart';
 import 'package:ebook_escribo/modules/infra/datasources/request_book_external.dart';
 import 'package:ebook_escribo/modules/infra/errors/errors.dart';
 import 'package:ebook_escribo/modules/infra/model/book.dart';
@@ -15,7 +12,6 @@ class RequestBookExternalMock extends Mock implements IRequestBookDatasource {}
 void main() {
   late RequestBookRepositoryImpl datasourceRequest;
   late IRequestBookDatasource bookExternal;
-  late Book response;
   setUp(() {
     bookExternal = RequestBookExternalMock();
     datasourceRequest = RequestBookRepositoryImpl(bookExternal: bookExternal);

@@ -34,7 +34,7 @@ class HttpDatasource implements IRequestBookDatasource {
       final String fileName = "${Random().nextInt(100) + 1}";
 
       if (response.statusCode == 200) {
-        final Directory appDocDir = await Directory.systemTemp;
+        final Directory appDocDir = Directory.systemTemp;
         final String downloadPath = '${appDocDir.path}/$fileName.epub';
 
         final File file = File(downloadPath);

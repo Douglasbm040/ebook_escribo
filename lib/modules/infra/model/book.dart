@@ -1,5 +1,4 @@
 import 'package:ebook_escribo/modules/domain/entity/book_entity.dart';
-import 'package:ebook_escribo/modules/presenter/controller/bookcontroller.dart';
 
 class Book extends BookEntity {
   Book({
@@ -48,7 +47,7 @@ class Book extends BookEntity {
             favorite: book.favorite);
 
   Map<String, dynamic> toJsonDAO() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['ID'] = id;
     data['TITLE'] = title;
     data['AUTHOR'] = author;
