@@ -35,7 +35,6 @@ class _HomeViewState extends State<HomeView> {
               page: controller.selectedIndex,
               controllerBook:
                   controller.listObserver()[controller.selectedIndex],
-              
             ),
           );
         }),
@@ -54,17 +53,23 @@ class _HomeViewState extends State<HomeView> {
                 iconSize: 30,
                 selectedIconTheme:
                     const IconThemeData(color: Colors.amberAccent, size: 32),
-                items: const <BottomNavigationBarItem>[
+                items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.menu_book_rounded),
+                    icon: Semantics(
+                        label: "botão para ir a aba Biblioteca",
+                        child: const Icon(Icons.menu_book_rounded)),
                     label: 'Library',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.download_rounded),
+                    icon: Semantics(
+                        label: "botão para ir a aba baixados",
+                        child: const Icon(Icons.download_rounded)),
                     label: 'Downloaded',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.book),
+                    icon: Semantics(
+                        label: "botão para ir a aba favoritos",
+                        child: const Icon(Icons.book)),
                     label: 'Favorites',
                   ),
                 ],

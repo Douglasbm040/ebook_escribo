@@ -24,6 +24,18 @@ class BookComponent extends StatefulWidget {
 class _BookComponentState extends State<BookComponent> {
   final Controller controller = Modular.get<Controller>();
   final BookController bookcontroller = Modular.get<BookController>();
+  ScaffoldMessengerState? _scaffoldMessenger;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _scaffoldMessenger = ScaffoldMessenger.of(context);
+  }
+
+  @override
+  void dispose() {
+    _scaffoldMessenger?.hideCurrentSnackBar();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,54 +64,61 @@ class _BookComponentState extends State<BookComponent> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: InkWell(
-                      onTap: () async {
-                        if (widget.pages == 0 || widget.pages == 2) {
-                          var snackBar = const SnackBar(
-                            content: Text("Baixando ..."),
-                            duration:
-                                Duration(seconds: 5), // Duração da exibição
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          String texto = await Modular.get<Controller>()
-                              .downloadBook(widget.itembook);
-                          snackBar = SnackBar(
-                            content: Text(texto),
-                            duration: const Duration(
-                                seconds: 3), // Duração da exibição
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else {
-                          if (widget.itembook.path != null) {
-                            Modular.to
-                                .pushNamed("/read", arguments: widget.itembook);
-                          }
-                          int x = 0;
-                          while (widget.itembook.path != null || x == 4) {
+                Semantics(
+                  label:
+                      "Livro ${widget.itembook.title} do ${widget.itembook.author}  ${widget.itembook.favorite == 1 ? "marcado como favorito" : "não marcado como favorito"} clique para baixar ",
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: InkWell(
+                        onTap: () async {
+                          if (widget.pages == 0 || widget.pages == 2) {
+                            var snackBar = const SnackBar(
+                              content: Text("Baixando ..."),
+                              duration:
+                                  Duration(seconds: 2), // Duração da exibição
+                            );
+                            Semantics(label: "baixando");
+                            _scaffoldMessenger?.showSnackBar(snackBar);
                             String texto = await Modular.get<Controller>()
                                 .downloadBook(widget.itembook);
-                            x++;
+                            snackBar = SnackBar(
+                              content: Text(texto),
+                              duration: const Duration(
+                                  seconds: 3), // Duração da exibição
+                            );
+                            Semantics(label: texto);
+                            _scaffoldMessenger?.showSnackBar(snackBar);
+                          } else {
+                            if (widget.itembook.path != null) {
+                              Modular.to.pushNamed("/read",
+                                  arguments: widget.itembook);
+                            }
+                            int x = 0;
+                            while (widget.itembook.path != null || x == 4) {
+                              String texto = await Modular.get<Controller>()
+                                  .downloadBook(widget.itembook);
+                              x++;
+                            }
                           }
-                        }
-                      },
-                      child: SizedBox(
-                        width: 300,
-                        height: 250,
-                        child: Image(
-                            fit: BoxFit.fill,
-                            image: CachedNetworkImageProvider(
-                              widget.itembook.coverUrl,
-                            ),
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              }
-                              return const CircularProgressIndicator();
-                            }),
+                        },
+                        child: SizedBox(
+                          width: 300,
+                          height: 250,
+                          child: Image(
+                              fit: BoxFit.fill,
+                              image: CachedNetworkImageProvider(
+                                widget.itembook.coverUrl,
+                              ),
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+                                return const CircularProgressIndicator();
+                              }),
+                        ),
                       ),
                     ),
                   ),

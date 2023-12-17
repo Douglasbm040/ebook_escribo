@@ -112,8 +112,8 @@ for (var i = 0; i < _booksRequested!.length - listBooks!.length; i++) {
   Future<String> downloadBook(BookEntity book) async {
     String? path;
     final response = await usecaseResquestBook.downloadBook(book.downloadUrl);
-    response.fold((l) => null, (r) => path = r);
-    if (path != null || path!.isNotEmpty) {
+    response.fold((l) => null, (r) => path = r );
+    if (path != null ) {
       int? transation;
       final response = await usecaseMangeBook.downloadBook(book, path!);
       response.fold((l) => null, (r) => transation = r);
@@ -123,11 +123,12 @@ for (var i = 0; i < _booksRequested!.length - listBooks!.length; i++) {
           return "você já possue este livro";
 
         case 2:
-          await initStateList();
+          booksDownloaded.add(book);
+          await getAllDownloaded();
 
           return "O livro foi adicionado a sua lista de downloads";
         default:
-          return "Erro ao baixar o livro,por favor verifique sua conexão";
+          return "Erro ao baixar o livro, por favor verifique sua conexão";
       }
     }
     return "ops... ocorreu um erro ao baixar o livro, tente novamente mais tarde";
@@ -137,7 +138,6 @@ for (var i = 0; i < _booksRequested!.length - listBooks!.length; i++) {
   Future initStateList() async {
     await Future.wait<void>(
         [getAllDownloaded(), getAllFavorite(), getAllRequested()]);
-    print("atualizada");
   }
 
   @action
